@@ -1,10 +1,17 @@
 package no.moller.cmpmigrator;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 public class StatementModifierTest {
 
@@ -32,5 +39,15 @@ public class StatementModifierTest {
 		Assert.assertEquals("T1.FNR = :par1 AND T1.EVENTTYPE > 0 AND T1.MAINRESOURCE = :par2 AND "
 				+ "T1.STARTTIME >= :par3 AND T1.STARTTIME <= :par4 FOR READ ONLY", res);
 	}
+
+    @Test
+    public void testSelect() throws SAXException, IOException {
+        ArrayList<String> list = new ArrayList<String>();
+        Collections.addAll(list, "DateNew", "AppointmentID", "fnr", "DateOld");
+
+        String ret = StatementModifier.makeSelectStatement("TestClass",list);
+
+        assertEquals("public final static String SELECT = \"select DateNew, AppointmentID, fnr, DateOld from TestClass \"", ret);
+    }
 }
 

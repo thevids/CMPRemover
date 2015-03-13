@@ -3,6 +3,7 @@ package no.moller.cmpmigrator;
 import static org.joox.JOOX.$;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import org.jboss.forge.roaster.model.source.JavaInterfaceSource;
@@ -32,4 +33,12 @@ public class XMLFieldFetcher {
                     		 .filter(ctx -> $(ctx).child().child().attr("href").split("#")[1].equalsIgnoreCase(className))
                     		 .attr("whereClause");
 	}
+
+    public static Collection<String> retrieveFields(String ejbjarDocAsString, String className) {
+        return $(ejbjarDocAsString).find("entity")
+                .filter(ctx -> $(ctx).attr("id").equals(className))
+                .find("cmp-field")
+                .find("field-name")
+                .contents();
+    }
 }

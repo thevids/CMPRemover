@@ -8,6 +8,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 import org.jboss.forge.roaster.Roaster;
@@ -90,6 +92,8 @@ public class DaoGenerator {
         // Read file, once, into memory for speed
         String docAsString = IOUtils.toString(new File(filePathToOldXmi + "ibm-ejb-jar-ext.xmi").toURI(),
                 Charset.forName("ISO-8859-1"));
+        String ejbjarDocAsString = IOUtils.toString(new File(filePathToOldXmi + "ejb-jar.xml").toURI(),
+                Charset.forName("ISO-8859-1"));
 
         impl = Roaster.create(JavaClassSource.class);
 
@@ -100,6 +104,10 @@ public class DaoGenerator {
 
         impl.addField("private NamedParameterJdbcTemplate mwinNamedTemplate")
               .addAnnotation(org.springframework.beans.factory.annotation.Autowired.class);
+
+        impl.addField(StatementModifier.makeSelectStatement(className,
+                                            XMLFieldFetcher.retrieveFields(ejbjarDocAsString, className)))
+            .getJavaDoc().setFullText("Select-statement with ALL fields.");
 
         // Implement methods
         for(MethodSource<JavaInterfaceSource> met: homeInterface.getMethods()) {
@@ -112,19 +120,20 @@ public class DaoGenerator {
             MethodSource<JavaInterfaceSource> met) throws SAXException, IOException {
 
         // Put parameters in a string equal to that in the xmi-file
-        final StringBuilder buildParams = new StringBuilder("");
-        met.getParameters().forEach(p -> buildParams.append(p.getType()).append(" "));
+        String paramsAsString = met.getParameters().stream()
+                                   .map(p -> p.getType().toString()) // java-type of param
+                                   .collect(Collectors.joining(" ")); // joined seperated by a space
 
         // Find where-statement in xmi-file
         String whereStatement = XMLFieldFetcher.retrieveWhereStatement(docAsString,
-                                    className, met.getName(), buildParams.toString().trim());
+                                    className, met.getName(), paramsAsString.trim());
 
         if(whereStatement == null || whereStatement.trim().isEmpty()) {
             return "    throw java.lang.UnsupportedOperationException(\"Not yet implemented\");\n"
                     + "/* TODO: Empty method, needs to be written by hand.*/ \n";
         }
 
-        // We like to use named paramters (not the anonym '?' that is default
+        // We like to use named parameters (not the anonym '?' that is default
         String namedParamWhereStatement =
                 StatementModifier.makeNamedParamWhereStatement(whereStatement, met.getParameters());
 
