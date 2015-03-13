@@ -1,0 +1,854 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejbext:EJBJarExtension xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ejb="ejb.xmi" xmlns:ejbext="ejbext.xmi" xmi:id="ejb-jar_ID_Ext">
+  <ejbExtensions xmi:type="ejbext:ContainerManagedEntityExtension" xmi:id="Appointment_Ext" name="Appointment">
+    <runAsSettings xmi:id="SecurityIdentity_1">
+      <methodElements xmi:id="MethodElement_1" name="*" type="Unspecified">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <runAsMode xmi:type="ejbext:UseSystemIdentity" xmi:id="UseSystemIdentity_1"/>
+    </runAsSettings>
+    <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+    <isolationLevelAttributes xmi:id="IsolationLevelAttributes_1132836975981" isolationLevel="READ_COMMITTED">
+      <methodElements xmi:id="MethodElement_1132836975981" name="*" type="Unspecified">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+    </isolationLevelAttributes>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="Appointment_findBySerie_WhereClause_ID" whereClause="T1.FNR = ? AND T1.SERIEID = ? ORDER BY STARTTIME">
+      <finderMethodElements xmi:id="MethodElement_3" name="findBySerie" parms="java.lang.String int " type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="Appointment_findAppointmentsBetween_WhereClause_ID" whereClause="T1.FNR = ? AND T1.MAINRESOURCE = ? AND T1.STARTTIME >= ? AND T1.STARTTIME &lt; ?">
+      <finderMethodElements xmi:id="MethodElement_4" name="findAppointmentsBetween" parms="java.lang.String int java.lang.String java.lang.String " type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="Appointment_findAppointment_WhereClause_ID" whereClause="T1.FNR = ? AND T1.APPOINTMENTID = ?">
+      <finderMethodElements xmi:id="MethodElement_5" name="findAppointment" parms="java.lang.String java.lang.String " type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="Appointment_findByCarRegNumber_WhereClause_ID" whereClause="T1.FNR = ? AND T1.CARREGNUMBER = ? ORDER BY STARTTIME">
+      <finderMethodElements xmi:id="MethodElement_6" name="findByCarRegNumber" parms="java.lang.String java.lang.String " type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="Appointment_findByCustomerName_WhereClause_ID" whereClause="T1.FNR = ? AND T1.CUSTOMERNAME LIKE ? ORDER BY STARTTIME">
+      <finderMethodElements xmi:id="MethodElement_9" name="findByCustomerName" parms="java.lang.String java.lang.String " type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="Appointment_findNewestAppointment_WhereClause_ID" whereClause="T1.APPOINTMENTID = (SELECT MAX(APPOINTMENTID) FROM MWIN.APPOINTMENT)">
+      <finderMethodElements xmi:id="MethodElement_10" name="findNewestAppointment" parms="" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1080720865167" whereClause="T1.FNR = ? AND T1.GJGAAR = ? AND T1.GJGNR = ? AND T1.OPPDRAGNR = ? AND T1.STARTTIME >= ? ORDER BY STARTTIME">
+      <finderMethodElements xmi:id="MethodElement_1080720865167" name="findByWorkshopSessionFromDate" parms="java.lang.String short int short java.lang.String " type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1097407613585" whereClause="T1.FNR = ? AND T1.MVERKORDERNUMBER = ? AND T1.STARTTIME >= ? ORDER BY STARTTIME">
+      <finderMethodElements xmi:id="MethodElement_1097407613585" name="findByOrderNumberFromDate" parms="java.lang.String java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1097407613586" whereClause="T1.FNR = ? AND T1.MVERKORDERNUMBER = ? ORDER BY STARTTIME">
+      <finderMethodElements xmi:id="MethodElement_1097407613586" name="findByOrderNumber" parms="java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1178110816464" whereClause="T1.FNR = ? AND T1.JOBSTATUS = ? ORDER BY STARTTIME">
+      <finderMethodElements xmi:id="MethodElement_1178110816464" name="findByJobStatus" parms="java.lang.String int" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1178127014545" whereClause="T1.FNR = ? AND T1.JOBSTATUS = ? AND T1.STARTTIME >= ? AND T1.ENDTIME &lt;= ? ORDER BY STARTTIME">
+      <finderMethodElements xmi:id="MethodElement_1178127014545" name="findByJobStatusPeriode" parms="java.lang.String int java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1190549528944" whereClause="T1.FNR = ? AND T1.EVENTTYPE > 0 AND T1.STARTTIME >= ? AND T1.STARTTIME &lt;= ? FOR READ ONLY">
+      <finderMethodElements xmi:id="MethodElement_1190549528944" name="findEventsInPeriode" parms="java.lang.String java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1193256862081" whereClause="T1.FNR = ? AND T1.EVENTTYPE > 0 AND T1.MAINRESOURCE = ? AND T1.STARTTIME >= ? AND T1.STARTTIME &lt;= ? FOR READ ONLY">
+      <finderMethodElements xmi:id="MethodElement_1193256862081" name="findEventsForResource" parms="java.lang.String int java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1306127586867" whereClause="T1.SERIEID = (SELECT MAX(SERIEID) FROM MWIN.APPOINTMENT)">
+      <finderMethodElements xmi:id="MethodElement_1306127586867" name="findNewestSerie" parms="" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1306244830397" whereClause="T1.FNR = ? AND T1.MAINRESOURCE = ? AND SUBSTR(T1.APPOINTMENTID, 1, 8) = SUBSTR(?, 1, 8) AND T1.ORDERCONNECTED = 1 ORDER BY STARTTIME WITH UR">
+      <finderMethodElements xmi:id="MethodElement_1306244830397" name="findAppointmentsOnDayByResource" parms="java.lang.String int java.lang.String " type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1306244830398" whereClause="T1.FNR = ? AND SUBSTR(T1.APPOINTMENTID, 1, 8) = SUBSTR(?, 1, 8) WITH UR">
+      <finderMethodElements xmi:id="MethodElement_1306244830398" name="findAppointmentsOnDay" parms="java.lang.String java.lang.String " type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1306244830399" whereClause="T1.FNR = ? AND T1.MAINRESOURCE = ? AND SUBSTR(T1.APPOINTMENTID, 1, 8) = SUBSTR(?, 1, 8) ORDER BY STARTTIME WITH UR">
+      <finderMethodElements xmi:id="MethodElement_1306244830399" name="findAllAppointmentsOnDayByResource" parms="java.lang.String int java.lang.String " type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1306244830400" whereClause="SELECT T1.GJGAAR, T1.GJGNR, T1.STARTTIME, T1.ALLOCATEDRES, T1.FNR, T1.STRSTATUS2, T1.INTSTATUS2, T1.ENDTIME, T1.MAINRESOURCE, T1.QUALITYCONTROL, T1.ORDERCONNECTED, T1.CREATEDBY, T1.DATECHANGED, T1.INVOICEPRICE, T1.CHANGEDBY, T1.DATECREATED, T1.MECHANICIANCONTROL, T1.PARTSSTATUS, T1.STRSTATUS1, T1.MECHANICIANSTATUS, T1.JOBSTATUS, T1.INTSTATUS1, T1.COMMENT, T1.APPOINTMENTID, T1.CARREGNUMBER, T1.CUSTOMERNAME, T1.TIMESTAMPCREATED, T1.APPOINTMENTTYPE, T1.SERIEID, T1.EVENTTYPE, T1.CUSTOMERWAITING, T1.INTERRUPTEDDESCRIPTION, T1.GJGAAR, T1.GJGNR, T1.OPPDRAGNR FROM MWIN.APPOINTMENT  T1 WHERE T1.FNR = ? AND T1.GJGAAR = ? AND T1.GJGNR = ? AND SUBSTR(T1.STARTTIME, 1, 8) = ? WITH UR">
+      <finderMethodElements xmi:id="MethodElement_1306244830400" name="findAppointmentFromPartsList" parms="java.lang.String short int java.lang.String " type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1306244830401" whereClause="T1.FNR = ? AND T1.MVERKORDERNUMBER = ? AND SUBSTR(T1.STARTTIME, 1, 8) = ? WITH UR">
+      <finderMethodElements xmi:id="MethodElement_1306244830401" name="findAppointmentFromPartsListLegacyMVK" parms="java.lang.String java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1382103645659" whereClause="T1.FNR = ? AND T1.GJGAAR = ? AND T1.GJGNR= ? AND T1.OppdragNr = ? WITH UR">
+      <finderMethodElements xmi:id="MethodElement_1382103645659" name="findByWorkshopSession" parms="java.lang.String short int short " type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <accessIntents xmi:id="AccessIntent_1132254426772" intentType="READ">
+      <methodElements xmi:id="MethodElement_1132254426772" name="findAllAppointmentsOnDayByResource" parms="java.lang.String int java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426773" name="findAppointment" parms="java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426774" name="findAppointmentFromPartsList" parms="java.lang.String short int java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426775" name="findAppointmentFromPartsListLegacyMVK" parms="java.lang.String java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426776" name="findAppointmentsBetween" parms="java.lang.String int java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426777" name="findAppointmentsOnDay" parms="java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426778" name="findAppointmentsOnDayByResource" parms="java.lang.String int java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426779" name="findByCarRegNumber" parms="java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426780" name="findByCustomerName" parms="java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426781" name="findByOrderNumber" parms="java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426782" name="findByOrderNumberFromDate" parms="java.lang.String java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426783" name="findByPrimaryKey" parms="no.moller.evp.model.ejb.AppointmentKey" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426784" name="findBySerie" parms="java.lang.String int" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426785" name="findByWorkshopSession" parms="java.lang.String short int short" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426786" name="findByWorkshopSessionFromDate" parms="java.lang.String short int short java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426787" name="findNewestAppointment" parms="" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426788" name="findNewestSerie" parms="" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426789" name="_copyFromEJB" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426790" name="getAllocatedRes" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426791" name="getAppointmentType" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426792" name="getCarChassisNumber" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426793" name="getCarKm" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426794" name="getCarRegNumber" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426795" name="getChangedBy" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426796" name="getComment" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426797" name="getCreatedBy" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426798" name="getCustomerAddress" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426799" name="getCustomerEmail" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426800" name="getCustomerName" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426801" name="getCustomerTlf" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426802" name="getCustomerTlfToday" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426803" name="getCustomerWaiting" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426804" name="getDateChanged" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426805" name="getDateCreated" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426806" name="getEndTime" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426807" name="getEventtype" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426808" name="getGjgAar" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426809" name="getGjgNr" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426810" name="getIntStatus1" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426811" name="getIntStatus2" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426812" name="getInterruptedDescription" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426813" name="getInvoicePrice" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426814" name="getJobStatus" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426815" name="getMainResource" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426816" name="getMechanicianControl" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426817" name="getMechanicianStatus" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426818" name="getMverkOrderNumber" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426819" name="getOppdragNr" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426820" name="getOrderConnected" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426821" name="getOrderText" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426822" name="getPartsStatus" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426823" name="getQualityControl" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426824" name="getSerieID" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426825" name="getStartTime" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426826" name="getStrStatus1" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426827" name="getStrStatus2" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426828" name="getTimeStampCreated" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1317368924599" name="getAuthorized" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1321285002514" name="getAuthorizedDate" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1360227089748" name="getHasVcoInSession" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointment"/>
+      </methodElements>
+    </accessIntents>
+  </ejbExtensions>
+  <ejbExtensions xmi:type="ejbext:ContainerManagedEntityExtension" xmi:id="Appointmentchanged_Ext" name="Appointmentchanged">
+    <runAsSettings xmi:id="SecurityIdentity_2">
+      <methodElements xmi:id="MethodElement_52" name="*" type="Unspecified">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <runAsMode xmi:type="ejbext:UseSystemIdentity" xmi:id="UseSystemIdentity_2"/>
+    </runAsSettings>
+    <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+    <isolationLevelAttributes xmi:id="IsolationLevelAttributes_1143493525507" isolationLevel="READ_COMMITTED">
+      <methodElements xmi:id="MethodElement_1143493525507" name="*" type="Unspecified">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+    </isolationLevelAttributes>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="Appointmentchanged_findChangedAppointment_WhereClause_ID" whereClause="T1.FNR = ? AND T1.APPOINTMENTID = ?">
+      <finderMethodElements xmi:id="MethodElement_54" name="findChangedAppointment" parms="java.lang.String int" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="Appointmentchanged_findChangedAppointmentall_WhereClause_ID" whereClause="T1.FNR = ?">
+      <finderMethodElements xmi:id="MethodElement_55" name="findChangedAppointmentall" parms="java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="Appointmentchanged_findChangedAppointmentAllByOldDate_WhereClause_ID" whereClause="T1.FNR = ? ORDER BY DATEOLD">
+      <finderMethodElements xmi:id="MethodElement_56" name="findChangedAppointmentAllByOldDate" parms="java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="Appointmentchanged_findChangedAppointmentAllByNewDate_WhereClause_ID" whereClause="T1.FNR = ? ORDER BY DATENEW">
+      <finderMethodElements xmi:id="MethodElement_57" name="findChangedAppointmentAllByNewDate" parms="java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="Appointmentchanged_findChangedAppointmentAllByAction_WhereClause_ID" whereClause="T1.FNR = ? ORDER BY ACTION,DATENEW">
+      <finderMethodElements xmi:id="MethodElement_59" name="findChangedAppointmentAllByAction" parms="java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="Appointmentchanged_findNewestAppointment_WhereClause_ID" whereClause="T1.APPOINTMENTID = (SELECT MAX(APPOINTMENTID) FROM MWIN.Appointmentchanged)">
+      <finderMethodElements xmi:id="MethodElement_60" name="findNewestAppointment" parms="" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1082311041827" whereClause="T1.FNR = ? ORDER BY GJGNR">
+      <finderMethodElements xmi:id="MethodElement_1082311041827" name="findChangedAppointmentAllBySession" parms="java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1097407140735" whereClause="T1.FNR = ? ORDER BY ORDRENUMMERMVERK">
+      <finderMethodElements xmi:id="MethodElement_1097407140735" name="findChangedAppointmentAllByOrderNumber" parms="java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1143494386666" whereClause="T1.FNR = ? AND T1.GJGAAR = ? AND T1.GJGNR = ?">
+      <finderMethodElements xmi:id="MethodElement_1143494386666" name="findChangedAppointmentForSession" parms="java.lang.String short int " type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <accessIntents xmi:id="AccessIntent_1143494788764" intentType="READ">
+      <methodElements xmi:id="MethodElement_1143494788764" name="findByPrimaryKey" parms="no.moller.evp.model.ejb.AppointmentchangedKey" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1143494788765" name="findChangedAppointment" parms="java.lang.String int" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1143494788766" name="findChangedAppointmentAllByAction" parms="java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1143494788767" name="findChangedAppointmentAllByNewDate" parms="java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1143494788768" name="findChangedAppointmentAllByOldDate" parms="java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1143494788769" name="findChangedAppointmentAllByOrderNumber" parms="java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1143494788770" name="findChangedAppointmentAllBySession" parms="java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1143494788771" name="findChangedAppointmentForSession" parms="java.lang.String short int" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1143494788772" name="findChangedAppointmentall" parms="java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1143494788773" name="findNewestAppointment" parms="" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1143494788774" name="_copyFromEJB" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1143494788775" name="getAction" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1143494788776" name="getDateNew" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1143494788777" name="getDateOld" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1143494788778" name="getGjgAar" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1143494788779" name="getGjgNr" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1143494788780" name="getOrdrenummerMverk" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1143494788781" name="getTimeStampCreated" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1143494788782" name="setGjgAar" parms="short" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1143494788783" name="setGjgNr" parms="int" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Appointmentchanged"/>
+      </methodElements>
+    </accessIntents>
+  </ejbExtensions>
+  <ejbExtensions xmi:type="ejbext:ContainerManagedEntityExtension" xmi:id="AvailableTimeDay_Ext" name="AvailableTimeDay">
+    <runAsSettings xmi:id="SecurityIdentity_5">
+      <methodElements xmi:id="MethodElement_71" name="*" type="Unspecified">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+      <runAsMode xmi:type="ejbext:UseSystemIdentity" xmi:id="UseSystemIdentity_5"/>
+    </runAsSettings>
+    <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+    <isolationLevelAttributes xmi:id="IsolationLevelAttributes_1132836975993" isolationLevel="READ_COMMITTED">
+      <methodElements xmi:id="MethodElement_1132836975993" name="*" type="Unspecified">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+    </isolationLevelAttributes>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="AvailableTimeDay_findBetweenDates_WhereClause_ID" whereClause="T1.FNR = ? AND T1.RESOURCEID = ? AND T1.DATE >= ? AND T1.DATE &lt;= ? ORDER BY DATE ">
+      <finderMethodElements xmi:id="MethodElement_73" name="findBetweenDates" parms="java.lang.String int java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="AvailableTimeDay_findByResource_WhereClause_ID" whereClause="T1.FNR = ? AND T1.RESOURCEID = ?">
+      <finderMethodElements xmi:id="MethodElement_74" name="findByResource" parms="java.lang.String int" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="AvailableTimeDay_findFromDate_WhereClause_ID" whereClause="T1.FNR = ? AND T1.RESOURCEID = ? AND T1.DATE >= ? ORDER BY DATE">
+      <finderMethodElements xmi:id="MethodElement_75" name="findFromDate" parms="java.lang.String int java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="AvailableTimeDay_findAvailableTimeDay_WhereClause_ID" whereClause="T1.FNR = ? AND T1.RESOURCEID = ? AND T1.DATE = ?">
+      <finderMethodElements xmi:id="MethodElement_76" name="findAvailableTimeDay" parms="java.lang.String int java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1190537163391" whereClause="T1.FNR = ? AND T1.DATE >= ? AND T1.DATE &lt;= ? FOR READ ONLY">
+      <finderMethodElements xmi:id="MethodElement_1190537163391" name="findByDatesForReport" parms="java.lang.String java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1192816693102" whereClause="T1.FNR = ? AND T1.RESOURCEID = ? AND T1.DATE >= ? AND T1.DATE &lt;= ? FOR READ ONLY">
+      <finderMethodElements xmi:id="MethodElement_1192816693102" name="findByResourceAndDates" parms="java.lang.String int java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <accessIntents xmi:id="AccessIntent_1132254426792" intentType="READ">
+      <methodElements xmi:id="MethodElement_1132254426846" name="findAvailableTimeDay" parms="java.lang.String int java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426847" name="findBetweenDates" parms="java.lang.String int java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426848" name="findByPrimaryKey" parms="no.moller.evp.model.ejb.AvailableTimeDayKey" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426849" name="findByResource" parms="java.lang.String int" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426850" name="findFromDate" parms="java.lang.String int java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426851" name="_copyFromEJB" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426852" name="getAvailTime" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426853" name="getDispTime" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426854" name="getEndTime" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426855" name="getExpressEndTime" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426856" name="getExpressStartTime" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426857" name="getExpressTimeUsed" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426858" name="getLunchEndTime" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426859" name="getLunchStartTime" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426860" name="getLunchTimeUsed" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426861" name="getStartTime" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426862" name="getTimeUsed" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426863" name="isPublicHoliday" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#AvailableTimeDay"/>
+      </methodElements>
+    </accessIntents>
+  </ejbExtensions>
+  <ejbExtensions xmi:type="ejbext:ContainerManagedEntityExtension" xmi:id="Resource_Ext" name="Resource">
+    <runAsSettings xmi:id="SecurityIdentity_10">
+      <methodElements xmi:id="MethodElement_99" name="*" type="Unspecified">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <runAsMode xmi:type="ejbext:UseSystemIdentity" xmi:id="UseSystemIdentity_10"/>
+    </runAsSettings>
+    <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+    <isolationLevelAttributes xmi:id="IsolationLevelAttributes_1132836975996" isolationLevel="READ_COMMITTED">
+      <methodElements xmi:id="MethodElement_1132836975996" name="*" type="Unspecified">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+    </isolationLevelAttributes>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="Resource_findResourcesByShiftPlan_WhereClause_ID" whereClause="T1.FNR = ? AND T1.PLANID = ?">
+      <finderMethodElements xmi:id="MethodElement_104" name="findResourcesByShiftPlan" parms="java.lang.String int" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="Resource_findResourcesInGroup_WhereClause_ID" whereClause="T1.FNR = ? AND T1.RESOURCEGROUPREF = ?">
+      <finderMethodElements xmi:id="MethodElement_105" name="findResourcesInGroup" parms="java.lang.String int" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="Resource_findResource_WhereClause_ID" whereClause="T1.FNR = ? AND T1.RESOURCEID = ?">
+      <finderMethodElements xmi:id="MethodElement_106" name="findResource" parms="java.lang.String int" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="Resource_findResourcesBySkills_WhereClause_ID" whereClause="T1.FNR = ? AND T1.SKILLTYPES LIKE '%?%'">
+      <finderMethodElements xmi:id="MethodElement_107" name="findResourcesBySkills" parms="java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:EjbqlFinderDescriptor" xmi:id="EjbqlFinderDescriptor_1168439739166" ejbqlQueryString="select object(o) from ResourceBean o ORDER BY o.fnr">
+      <finderMethodElements xmi:id="MethodElement_1168439739166" name="findAllResources" parms="" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1174581403711" whereClause="T1.FNR = ?">
+      <finderMethodElements xmi:id="MethodElement_1174581403711" name="findResources" parms="java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1316719179068" whereClause="T1.RESOURCEID = (SELECT MAX(RESOURCEID) FROM MWIN.RESOURCE)">
+      <finderMethodElements xmi:id="MethodElement_1316719179068" name="findNewestResource" parms="" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1382103645660" whereClause="T1.FNR = ? AND T1.MNETMEKID = ? WITH UR">
+      <finderMethodElements xmi:id="MethodElement_1382103645660" name="findResourceByMekID" parms="java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <accessIntents xmi:id="AccessIntent_1132254426802" intentType="READ">
+      <methodElements xmi:id="MethodElement_1132254426864" name="findByPrimaryKey" parms="no.moller.evp.model.ejb.ResourceKey" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426865" name="findNewestResource" parms="" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426866" name="findResource" parms="java.lang.String int" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426867" name="findResourceByMekID" parms="java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426868" name="findResources" parms="java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426869" name="findResourcesByShiftPlan" parms="java.lang.String int" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426870" name="findResourcesBySkills" parms="java.lang.String java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426871" name="findResourcesInGroup" parms="java.lang.String int" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426872" name="_copyFromEJB" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426873" name="getAvailableFrom" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426874" name="getAvailableTo" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426875" name="getBrandTypes" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426876" name="getChangedBy" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426877" name="getComment" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426878" name="getCreatedBy" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426879" name="getDateChanged" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426880" name="getDateCreated" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426881" name="getGroupPlan" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426882" name="getMnetMekID" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426883" name="getPlanConnected" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426884" name="getPlanID" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426885" name="getResourceGroupRef" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426886" name="getResourceName" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426887" name="getResourceType" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426888" name="getSkillTypes" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426889" name="getSortering" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426890" name="getTimeStampCreated" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1318255769190" name="getBookable" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1326803058967" name="getToolCompensation" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1326803058968" name="getToolCompensationRate" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#Resource"/>
+      </methodElements>
+    </accessIntents>
+  </ejbExtensions>
+  <ejbExtensions xmi:type="ejbext:ContainerManagedEntityExtension" xmi:id="ResourceGroup_Ext" name="ResourceGroup">
+    <runAsSettings xmi:id="SecurityIdentity_11">
+      <methodElements xmi:id="MethodElement_126" name="*" type="Unspecified">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </methodElements>
+      <runAsMode xmi:type="ejbext:UseSystemIdentity" xmi:id="UseSystemIdentity_11"/>
+    </runAsSettings>
+    <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+    <isolationLevelAttributes xmi:id="IsolationLevelAttributes_1132836975997" isolationLevel="READ_COMMITTED">
+      <methodElements xmi:id="MethodElement_1132836975997" name="*" type="Unspecified">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </methodElements>
+    </isolationLevelAttributes>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="ResourceGroup_findResourceGroup_WhereClause_ID" whereClause="T1.FNR = ? AND T1.RESOURCEGROUPID = ?">
+      <finderMethodElements xmi:id="MethodElement_129" name="findResourceGroup" parms="java.lang.String int" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="ResourceGroup_findResourceGroups_WhereClause_ID" whereClause="T1.FNR = ?">
+      <finderMethodElements xmi:id="MethodElement_130" name="findResourceGroups" parms="java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="ResourceGroup_findResourceGroupsByShiftPlan_WhereClause_ID" whereClause="T1.FNR = ? AND T1.PLANID = ?">
+      <finderMethodElements xmi:id="MethodElement_131" name="findResourceGroupsByShiftPlan" parms="java.lang.String int" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1316719260018" whereClause="T1.RESOURCEGROUPID = (SELECT MAX(RESOURCEGROUPID) FROM MWIN.RESOURCEGROUP)">
+      <finderMethodElements xmi:id="MethodElement_1316719260018" name="findNewestResourceGroup" parms="" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <accessIntents xmi:id="AccessIntent_1132254426822" intentType="READ">
+      <methodElements xmi:id="MethodElement_1132254426891" name="findByPrimaryKey" parms="no.moller.evp.model.ejb.ResourceGroupKey" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426892" name="findNewestResourceGroup" parms="" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426893" name="findResourceGroup" parms="java.lang.String int" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426894" name="findResourceGroups" parms="java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426895" name="findResourceGroupsByShiftPlan" parms="java.lang.String int" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426896" name="_copyFromEJB" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426897" name="getChangedBy" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426898" name="getComment" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426899" name="getCreatedBy" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426900" name="getDateChanged" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426901" name="getDateCreated" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426902" name="getGroupName" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426903" name="getPlanConnected" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426904" name="getPlanID" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426905" name="getResourceGroupRef" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426906" name="getTimeStampCreated" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ResourceGroup"/>
+      </methodElements>
+    </accessIntents>
+  </ejbExtensions>
+  <ejbExtensions xmi:type="ejbext:ContainerManagedEntityExtension" xmi:id="ShiftPlan_Ext" name="ShiftPlan">
+    <runAsSettings xmi:id="SecurityIdentity_14">
+      <methodElements xmi:id="MethodElement_147" name="*" type="Unspecified">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+      <runAsMode xmi:type="ejbext:UseSystemIdentity" xmi:id="UseSystemIdentity_14"/>
+    </runAsSettings>
+    <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+    <isolationLevelAttributes xmi:id="IsolationLevelAttributes_1132836976000" isolationLevel="READ_COMMITTED">
+      <methodElements xmi:id="MethodElement_1132836976000" name="*" type="Unspecified">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+    </isolationLevelAttributes>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="ShiftPlan_findPlans_WhereClause_ID" whereClause="T1.FNR = ? ORDER BY PLANID,DAYNUMBER">
+      <finderMethodElements xmi:id="MethodElement_150" name="findPlans" parms="java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="ShiftPlan_findPlanDay_WhereClause_ID" whereClause="T1.FNR = ? AND T1.PLANID = ? AND T1.DAYNUMBER = ?">
+      <finderMethodElements xmi:id="MethodElement_151" name="findPlanDay" parms="java.lang.String int int" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="ShiftPlan_findPlan_WhereClause_ID" whereClause="T1.PLANID = ? AND T1.FNR = ? ORDER BY DAYNUMBER">
+      <finderMethodElements xmi:id="MethodElement_152" name="findPlan" parms="int java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <finderDescriptors xmi:type="ejbext:WhereClauseFinderDescriptor" xmi:id="WhereClauseFinderDescriptor_1316719260019" whereClause="T1.PLANID = (SELECT MAX(PLANID) FROM MWIN.SHIFTPLAN)">
+      <finderMethodElements xmi:id="MethodElement_1316719260019" name="findNewestPlan" parms="" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </finderMethodElements>
+    </finderDescriptors>
+    <accessIntents xmi:id="AccessIntent_1132254426823" intentType="READ">
+      <methodElements xmi:id="MethodElement_1132254426907" name="findByPrimaryKey" parms="no.moller.evp.model.ejb.ShiftPlanKey" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426908" name="findNewestPlan" parms="" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426909" name="findPlan" parms="int java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426910" name="findPlanDay" parms="java.lang.String int int" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426911" name="findPlans" parms="java.lang.String" type="Home">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426912" name="_copyFromEJB" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426913" name="getChangedBy" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426914" name="getCreatedBy" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426915" name="getDateChanged" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426916" name="getDateCreated" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426917" name="getDayType" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426918" name="getEndTime" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426919" name="getExpressEndTime" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426920" name="getExpressStartTime" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426921" name="getLunchEndTime" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426922" name="getLunchStartTime" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426923" name="getOperativeDate" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426924" name="getPlanName" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+      <methodElements xmi:id="MethodElement_1132254426925" name="getStartTime" parms="" type="Remote">
+        <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#ShiftPlan"/>
+      </methodElements>
+    </accessIntents>
+  </ejbExtensions>
+  <ejbJar href="META-INF/ejb-jar.xml#ejb-jar_ID"/>
+  <appliedAccessIntents xmi:id="AppliedAccessIntent_1132254426832" name="com.ibm.websphere.ejbquery.Default" description="" accessIntentName="wsOptimisticRead">
+    <methodElements xmi:id="MethodElement_1132254426926" type="Unspecified">
+      <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#TaskReadyForPlanning"/>
+    </methodElements>
+  </appliedAccessIntents>
+  <appliedAccessIntents xmi:id="AppliedAccessIntent_1132735260471" name="com.ibm.websphere.ejbquery.Default" description="" accessIntentName="wsOptimisticRead">
+    <methodElements xmi:id="MethodElement_1132735260476" type="Unspecified">
+      <enterpriseBean xmi:type="ejb:ContainerManagedEntity" href="META-INF/ejb-jar.xml#PublicHoliday"/>
+    </methodElements>
+  </appliedAccessIntents>
+</ejbext:EJBJarExtension>
