@@ -44,7 +44,7 @@
                <field-name>allocatedRes</field-name>
             </cmp-field>
             <cmp-field id="Appointment_serieID">
-               <field-name>serie	ID</field-name>
+               <field-name>serieID</field-name>
             </cmp-field>
             <cmp-field id="Appointment_dateCreated">
                <field-name>dateCreated</field-name>

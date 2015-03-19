@@ -4,10 +4,7 @@ import static org.joox.JOOX.$;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 
-import org.jboss.forge.roaster.model.source.JavaInterfaceSource;
-import org.jboss.forge.roaster.model.source.ParameterSource;
 import org.xml.sax.SAXException;
 
 public class XMLFieldFetcher {

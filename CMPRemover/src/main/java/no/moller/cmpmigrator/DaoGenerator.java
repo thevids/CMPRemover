@@ -1,22 +1,19 @@
 package no.moller.cmpmigrator;
 
-import static org.joox.JOOX.$;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaInterfaceSource;
 import org.jboss.forge.roaster.model.source.MethodSource;
-import org.jboss.forge.roaster.model.source.ParameterSource;
 import org.xml.sax.SAXException;
 
 public class DaoGenerator {
@@ -42,33 +39,50 @@ public class DaoGenerator {
      */
     public DaoGenerator(String filePathToOldCode,
                         String newPackage,
-                        String filePathToOldXmi) throws IOException, SAXException {
+                        String filePathToOldXmi,
+                        String className) throws IOException, SAXException {
         this.filePathToOldCode = filePathToOldCode;
         this.newPackage = newPackage;
         this.filePathToOldXmi = filePathToOldXmi;
 
-        generate();
+        generate(className);
     }
 
     /**
      * Does the real work of generating interface and dao impl class.
+     * @param className
      *
      * @throws IOException
      * @throws SAXException
      */
-    private void generate() throws IOException, SAXException {
-        final String classAsString = IOUtils.toString(new File(filePathToOldCode + "AppointmentHome.java").toURI(),
+    private void generate(String className) throws IOException, SAXException {
+        final String classAsString = IOUtils.toString(new File(filePathToOldCode + className + "Home.java").toURI(),
                 Charset.forName("ISO-8859-1"));
 
         // Read existing ebj-HomeInterface
         homeInterface = Roaster.parse(JavaInterfaceSource.class, classAsString);
 
-        final String className = homeInterface.getName().replaceAll("Home", "");
         final String interfaceName = className + "Dao";
 
         purifyInterfaceRemoveEjbLegacy(interfaceName);
 
+        modifyInterface(className);
+
         generateImplementationClass(className, interfaceName);
+
+        homeInterface.getMethods().stream().filter(p -> p.getName().startsWith("find"))
+                    .filter(p -> p.getReturnType().isType(Enumeration.class))
+                    .forEach(p -> p.setReturnType("Enumeration<" + className + ">"));
+        impl.getMethods().stream().filter(p -> p.getName().startsWith("find"))
+                        .filter(p -> p.getReturnType().isType(Enumeration.class))
+                        .forEach(p -> p.setReturnType("Enumeration<" + className + ">"));
+    }
+
+    private void modifyInterface(final String className) {
+        homeInterface.getMethods().stream().filter(p -> p.getName().startsWith("create"))
+                                  .forEach(p -> p.addThrows(java.sql.SQLException.class));
+
+        homeInterface.addImport(Enumeration.class);
     }
 
     private void purifyInterfaceRemoveEjbLegacy(final String interfaceName) {
@@ -102,50 +116,72 @@ public class DaoGenerator {
             .addInterface(homeInterface.getQualifiedName())
             .getJavaDoc().setText("Implementation of JdbcDao");
 
+        addImports();
+
+        addFields(className, ejbjarDocAsString);
+
+        implementMethods(className, docAsString, ejbjarDocAsString);
+    }
+
+    private void implementMethods(final String className, String docAsString,
+            String ejbjarDocAsString) throws SAXException, IOException {
+        // Implement methods
+        for(MethodSource<JavaInterfaceSource> met: homeInterface.getMethods()) {
+            impl.addMethod(met.toString())
+                .setPublic() // Methods from interface are public
+                .setBody (makeMethodBody(className, docAsString, met));
+                //.addAnnotation("@SuppressWarnings(\"unchecked\")");
+        }
+
+        // Make an easier insert-method for all fields via domain-obj
+        impl.addMethod("public boolean create(" + className + "Bean " + className.toLowerCase() + ") {}")
+                .setBody(MethodBodyHelper.makeCreateAll(className, ejbjarDocAsString))
+                .addThrows(java.sql.SQLException.class);
+    }
+
+    private void addFields(final String className, String ejbjarDocAsString) {
         impl.addField("private NamedParameterJdbcTemplate mwinNamedTemplate")
               .addAnnotation(org.springframework.beans.factory.annotation.Autowired.class);
+
+        impl.addField("private SimpleJdbcInsert simpleInsert")
+        .addAnnotation(org.springframework.beans.factory.annotation.Autowired.class);
+
+        impl.addField("private RowMapper<List<Appointment>> mapper")
+        .addAnnotation(org.springframework.beans.factory.annotation.Autowired.class);
 
         impl.addField(StatementModifier.makeSelectStatement(className,
                                             XMLFieldFetcher.retrieveFields(ejbjarDocAsString, className)))
             .getJavaDoc().setFullText("Select-statement with ALL fields.");
+    }
 
-        // Implement methods
-        for(MethodSource<JavaInterfaceSource> met: homeInterface.getMethods()) {
-            impl.addMethod(met.toString()).setBody(
-                    makeMethodBody(className, docAsString, met));
-        }
+    private void addImports() {
+        homeInterface.getImports().forEach(p -> impl.addImport(p));
+        impl.addImport(HashMap.class);
+        impl.addImport(Map.class);
+        impl.addImport(SQLException.class);
+        impl.addImport(List.class);
+        impl.addImport("org.springframework.jdbc.core.namedparam.MapSqlParameterSource");
+        impl.addImport("org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate");
+        impl.addImport("org.springframework.jdbc.core.simple.SimpleJdbcInsert");
+        impl.addImport("org.springframework.jdbc.core.RowMapper");
     }
 
     private String makeMethodBody(final String className, String docAsString,
             MethodSource<JavaInterfaceSource> met) throws SAXException, IOException {
 
-        // Put parameters in a string equal to that in the xmi-file
-        String paramsAsString = met.getParameters().stream()
-                                   .map(p -> p.getType().toString()) // java-type of param
-                                   .collect(Collectors.joining(" ")); // joined seperated by a space
-
-        // Find where-statement in xmi-file
-        String whereStatement = XMLFieldFetcher.retrieveWhereStatement(docAsString,
-                                    className, met.getName(), paramsAsString.trim());
-
-        if(whereStatement == null || whereStatement.trim().isEmpty()) {
-            return "    throw java.lang.UnsupportedOperationException(\"Not yet implemented\");\n"
-                    + "/* TODO: Empty method, needs to be written by hand.*/ \n";
+        if(met.getName().startsWith("create")) {
+            return MethodBodyHelper.makeMethodBodyCreate(className, docAsString, met);
         }
 
-        // We like to use named parameters (not the anonym '?' that is default
-        String namedParamWhereStatement =
-                StatementModifier.makeNamedParamWhereStatement(whereStatement, met.getParameters());
-
-        return "    String whereSQL = \"" + namedParamWhereStatement + "\";\n" + "";
+        return MethodBodyHelper.makeMethodBodyFinder(className, docAsString, met);
     }
 
 
-    public JavaInterfaceSource getNewDaoInterface() {
+    public JavaInterfaceSource getDaoInterface() {
         return homeInterface;
     }
 
-    public JavaClassSource getNewDaoImpl() {
+    public JavaClassSource getDaoImpl() {
         return impl;
     }
 }

@@ -17,34 +17,36 @@ public class DaoGeneratorTest {
     private static final String FILE_PATH_TO_OLD_XMI =
             "./src/test/resources/";
     private static final String NEW_PACKAGE =
-            "no.moller.evp.dao";
+            "no.moller.evp.model.ejb";
 
     @Test
 	public void makeDaoTest() throws IOException, SAXException {
         final DaoGenerator dgen = new DaoGenerator(FILE_PATH_TO_OLD_CODE,
                 NEW_PACKAGE,
-                FILE_PATH_TO_OLD_XMI);
+                FILE_PATH_TO_OLD_XMI,
+                "Appointment");
 
 //        System.out.println(dgen.getNewDaoInterface());
-        System.out.println(dgen.getNewDaoImpl());
+        System.out.println(dgen.getDaoImpl());
 
-        assertFalse(dgen.getNewDaoInterface().hasInterface("javax.ejb.EJBHome"));
+        assertFalse(dgen.getDaoInterface().hasInterface("javax.ejb.EJBHome"));
 
-        JavaClassSource impl = dgen.getNewDaoImpl();
+        JavaClassSource impl = dgen.getDaoImpl();
         List<MethodSource<JavaClassSource>> methods = impl.getMethods();
         for (MethodSource<JavaClassSource> met : methods) {
 			if(met.getName().startsWith("find") && !met.getName().equals("findByPrimaryKey")) {
 
 				assertNotNull(met.getBody());
-				System.out.println(met.getBody());
 				assertTrue("Body should contain a where-statement", met.getBody().indexOf("whereSQL") > -1);
+			} else if(met.getName().startsWith("create")) {
+			    assertTrue("Body of create should contain a execute-call", met.getBody().indexOf("execute(") > -1);
 			} else {
 				assertTrue("Shold have UnsupportedOperationException if no where-statement",
 						met.getBody().contains("UnsupportedOperationException"));
 			}
 		}
 
-        assertFalse(dgen.getNewDaoInterface().hasInterface("javax.ejb.EJBHome"));
+        assertFalse(dgen.getDaoInterface().hasInterface("javax.ejb.EJBHome"));
 
 	}
 }
