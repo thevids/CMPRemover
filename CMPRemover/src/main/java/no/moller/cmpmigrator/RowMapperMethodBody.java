@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.jboss.forge.roaster.model.Type;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
-public class RowMapperMethodBodyGenerator {
+public class RowMapperMethodBody {
 
     private static String enlargeFirsLetter(String field) {
         return field.substring(0, 1).toUpperCase() + field.substring(1);
@@ -47,7 +47,7 @@ public class RowMapperMethodBodyGenerator {
 
 
     private static String fieldRetriver(String field, JavaClassSource bean) {
-        String get = "get" + field.substring(0, 1).toUpperCase() + field.substring(1);
+        String get = "get" + enlargeFirsLetter(field);
         if(bean.hasMethodSignature(get)) {
             boolean doTrim = false;
             Type<JavaClassSource> returnType = bean.getMethod(get).getReturnType();

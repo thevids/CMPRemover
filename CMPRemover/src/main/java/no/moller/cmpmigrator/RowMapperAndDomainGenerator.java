@@ -11,7 +11,7 @@ import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.xml.sax.SAXException;
 
-public class RowMapperGenerator {
+public class RowMapperAndDomainGenerator {
 
     // Init with filepaths etc
     final private String filePathToOldCode;
@@ -32,7 +32,7 @@ public class RowMapperGenerator {
      * @throws IOException
      * @throws SAXException
      */
-    public RowMapperGenerator(String filePathToOldCode,
+    public RowMapperAndDomainGenerator(String filePathToOldCode,
                         String newPackage,
                         String filePathToOldXmi,
                         String className) throws IOException, SAXException {
@@ -69,7 +69,7 @@ public class RowMapperGenerator {
         bean.removeInterface("javax.ejb.EntityBean")
                      .setPackage(newPackage)
                      .setName(domName)
-                     .getJavaDoc().setFullText("Rowmapper for JdbcDao.");
+                     .getJavaDoc().setFullText("Domain object.");
 
         bean.getMethods().stream()
             .filter(m -> m.getName().startsWith("ejb"))
@@ -97,8 +97,7 @@ public class RowMapperGenerator {
         mapper.setName(domObjName + "RowMapper")
             .setPackage(newPackage)
             .addInterface("UtilRowMapper<" + domObjName + ">")
-            .getJavaDoc().setText("Implementation of JdbcDao");
-
+            .getJavaDoc().setText("Rowmapper for JdbcDao");
 
         implementMethods(className, ejbjarDocAsString, domObjName);
     }
@@ -106,7 +105,7 @@ public class RowMapperGenerator {
     private void implementMethods(final String className, String ejbjarDocAsString, String domObjName) throws SAXException, IOException {
 
         mapper.addMethod("public " + domObjName + " mapRow(final ResultSet rs, final int rowNum) {}")
-                .setBody(RowMapperMethodBodyGenerator.makeMapRow(className, ejbjarDocAsString, bean))
+                .setBody(RowMapperMethodBody.makeMapRow(className, ejbjarDocAsString, bean))
                 .addThrows(java.sql.SQLException.class);
     }
 

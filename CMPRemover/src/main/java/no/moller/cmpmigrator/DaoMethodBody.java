@@ -8,13 +8,13 @@ import org.jboss.forge.roaster.model.source.JavaInterfaceSource;
 import org.jboss.forge.roaster.model.source.MethodSource;
 import org.xml.sax.SAXException;
 
-public class DaoMethodBodyGenerator {
+public class DaoMethodBody {
     /** For methods we do not support, generate body with this throw. */
     private static final String THROW_UNSUPPORTED =
             "throw new java.lang.UnsupportedOperationException(\"Not yet implemented\");\n"
             + "/* TODO: Empty method, needs to be written by hand.*/ \n";
 
-    static String makeMethodBodyFinder(final String className,
+    public static String makeMethodBodyFinder(final String className,
             String docAsString, MethodSource<JavaInterfaceSource> met)
             throws SAXException, IOException {
 
@@ -53,7 +53,7 @@ public class DaoMethodBodyGenerator {
     }
 
 
-    static String makeMethodBodyCreate(String className, String docAsString,
+    public static String makeMethodBodyCreate(String className, String docAsString,
             MethodSource<JavaInterfaceSource> met) {
 
         StringBuilder str = new StringBuilder();
@@ -81,7 +81,7 @@ public class DaoMethodBodyGenerator {
      * @param ejbjarDocAsString ejb-jar.xml in a string
      * @return body of create method
      */
-    static String makeCreateAll(String className, String ejbjarDocAsString) {
+    public static String makeCreateAll(String className, String ejbjarDocAsString) {
         Collection<String> fields = XMLFieldFetcher.retrieveFields(ejbjarDocAsString, className);
 
         StringBuilder str = new StringBuilder();

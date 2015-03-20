@@ -9,7 +9,7 @@ public class MethodBodyHelperTest {
 
     @Test
     public void testGettify() {
-        String gettify = DaoMethodBodyGenerator.gettify("hoursWorked", "Appointment");
+        String gettify = DaoMethodBody.gettify("hoursWorked", "Appointment");
         Assert.assertEquals("appointment.getHoursWorked()", gettify);
     }
 }

@@ -45,7 +45,7 @@ public class StatementModifierTest {
 
         String ret = StatementModifier.makeSelectStatement("TestClass",list);
 
-        assertEquals("public final static String SELECT = \"select DateNew, AppointmentID, fnr, DateOld from TestClass \"", ret);
+        assertEquals("public final static String SELECT = \"select DateNew, AppointmentID, fnr, DateOld from MWIN.TestClass \"", ret);
     }
 }
 

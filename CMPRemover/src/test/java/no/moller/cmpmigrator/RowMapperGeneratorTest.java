@@ -21,7 +21,7 @@ public class RowMapperGeneratorTest {
 
     @Test
 	public void makeDaoTest() throws IOException, SAXException {
-        final RowMapperGenerator rmGen = new RowMapperGenerator(FILE_PATH_TO_OLD_CODE,
+        final RowMapperAndDomainGenerator rmGen = new RowMapperAndDomainGenerator(FILE_PATH_TO_OLD_CODE,
                 NEW_PACKAGE,
                 FILE_PATH_TO_OLD_XMI,
                 "Appointment");

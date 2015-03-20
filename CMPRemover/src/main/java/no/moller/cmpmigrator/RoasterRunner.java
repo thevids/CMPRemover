@@ -33,18 +33,21 @@ public final class RoasterRunner {
      * @throws IOException We throw these raw, so you know things have gone wrong
      */
     public static void main(final String[] args) throws SAXException, IOException {
+//        String classToGenerateFor = "Appointment";
+        String classToGenerateFor = "Resource";
+
         final DaoGenerator dgen = new DaoGenerator(FILE_PATH_TO_OLD_CODE,
                                              NEW_PACKAGE,
                                              FILE_PATH_TO_OLD_XMI,
-                                             "Appointment");
+                                             classToGenerateFor);
 
         writeToFiles(dgen.getDaoImpl());
         writeToFiles(dgen.getDaoInterface());
 
-        final RowMapperGenerator rmGen = new RowMapperGenerator(FILE_PATH_TO_OLD_CODE,
+        final RowMapperAndDomainGenerator rmGen = new RowMapperAndDomainGenerator(FILE_PATH_TO_OLD_CODE,
                 NEW_PACKAGE,
                 FILE_PATH_TO_OLD_XMI,
-                "Appointment");
+                classToGenerateFor);
         writeToFiles(rmGen.getDomainObj());
         writeToFiles(rmGen.getRowMapper());
     }

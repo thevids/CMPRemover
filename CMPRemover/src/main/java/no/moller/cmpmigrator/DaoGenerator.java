@@ -13,6 +13,7 @@ import org.apache.commons.io.IOUtils;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaInterfaceSource;
+import org.jboss.forge.roaster.model.source.MethodHolderSource;
 import org.jboss.forge.roaster.model.source.MethodSource;
 import org.xml.sax.SAXException;
 
@@ -70,12 +71,15 @@ public class DaoGenerator {
 
         generateImplementationClass(className, interfaceName);
 
+        prettyReturnTypes(this.homeInterface, className);
+        prettyReturnTypes(this.impl, className);
+    }
+
+    /** Removes the package-path from the return-type, the type must be imported in stead. */
+    private void prettyReturnTypes(MethodHolderSource<?> source, String className) {
         homeInterface.getMethods().stream().filter(p -> p.getName().startsWith("find"))
                     .filter(p -> p.getReturnType().isType(Enumeration.class))
                     .forEach(p -> p.setReturnType("Enumeration<" + className + ">"));
-        impl.getMethods().stream().filter(p -> p.getName().startsWith("find"))
-                        .filter(p -> p.getReturnType().isType(Enumeration.class))
-                        .forEach(p -> p.setReturnType("Enumeration<" + className + ">"));
     }
 
     private void modifyInterface(final String className) {
@@ -135,7 +139,7 @@ public class DaoGenerator {
 
         // Make an easier insert-method for all fields via domain-obj
         impl.addMethod("public boolean create(" + className + "Bean " + className.toLowerCase() + ") {}")
-                .setBody(DaoMethodBodyGenerator.makeCreateAll(className, ejbjarDocAsString))
+                .setBody(DaoMethodBody.makeCreateAll(className, ejbjarDocAsString))
                 .addThrows(java.sql.SQLException.class);
     }
 
@@ -144,10 +148,10 @@ public class DaoGenerator {
               .addAnnotation(org.springframework.beans.factory.annotation.Autowired.class);
 
         impl.addField("private SimpleJdbcInsert simpleInsert")
-        .addAnnotation(org.springframework.beans.factory.annotation.Autowired.class);
+            .addAnnotation(org.springframework.beans.factory.annotation.Autowired.class);
 
         impl.addField("private RowMapper<List<Appointment>> mapper")
-        .addAnnotation(org.springframework.beans.factory.annotation.Autowired.class);
+            .addAnnotation(org.springframework.beans.factory.annotation.Autowired.class);
 
         impl.addField(StatementModifier.makeSelectStatement(className,
                                             XMLFieldFetcher.retrieveFields(ejbjarDocAsString, className)))
@@ -170,10 +174,10 @@ public class DaoGenerator {
             MethodSource<JavaInterfaceSource> met) throws SAXException, IOException {
 
         if(met.getName().startsWith("create")) {
-            return DaoMethodBodyGenerator.makeMethodBodyCreate(className, docAsString, met);
+            return DaoMethodBody.makeMethodBodyCreate(className, docAsString, met);
         }
 
-        return DaoMethodBodyGenerator.makeMethodBodyFinder(className, docAsString, met);
+        return DaoMethodBody.makeMethodBodyFinder(className, docAsString, met);
     }
 
 

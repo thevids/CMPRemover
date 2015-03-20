@@ -9,6 +9,7 @@ import org.jboss.forge.roaster.model.source.JavaInterfaceSource;
 import org.jboss.forge.roaster.model.source.ParameterSource;
 
 public class StatementModifier {
+    final static String SCHEAMNAME = "MWIN.";
     /**
      * Takes a list of methodparams and a wherestatement with ? and makes a named query string.
      *
@@ -47,6 +48,6 @@ public class StatementModifier {
 
         return "public final static String SELECT = \"select "
                     + fieldNamesCommaSeperated
-                    + " from " + className + " \"";
+                    + " from " + SCHEAMNAME + className + " \"";
     }
 }
