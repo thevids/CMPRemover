@@ -4,10 +4,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 
-import org.apache.commons.io.IOUtils;
+import org.jboss.forge.roaster.model.Named;
 import org.xml.sax.SAXException;
 
 /**
@@ -39,49 +38,24 @@ public final class RoasterRunner {
                                              FILE_PATH_TO_OLD_XMI,
                                              "Appointment");
 
-//        System.out.println(dgen.getNewDaoInterface());
-        System.out.println(dgen.getDaoImpl());
-        writeToFiles(dgen);
+        writeToFiles(dgen.getDaoImpl());
+        writeToFiles(dgen.getDaoInterface());
 
         final RowMapperGenerator rmGen = new RowMapperGenerator(FILE_PATH_TO_OLD_CODE,
                 NEW_PACKAGE,
                 FILE_PATH_TO_OLD_XMI,
                 "Appointment");
-        writeToFiles(rmGen);
+        writeToFiles(rmGen.getDomainObj());
+        writeToFiles(rmGen.getRowMapper());
     }
 
-    private static void writeToFiles(final DaoGenerator dgen)
+    private static void writeToFiles(final Named source)
             throws IOException {
         try (PrintWriter prw = new PrintWriter(
                 new BufferedWriter(
-                        new FileWriter(new File(dgen.getDaoImpl().getName() + ".java")))))
+                        new FileWriter(new File(source.getName() + ".java")))))
         {
-            prw.print(dgen.getDaoImpl().toString());
-        }
-
-        try (PrintWriter prw = new PrintWriter(
-                new BufferedWriter(
-                        new FileWriter(new File(dgen.getDaoInterface().getName() + ".java")))))
-        {
-            prw.print(dgen.getDaoInterface().toString());
+            prw.print(source.toString());
         }
     }
-
-    private static void writeToFiles(final RowMapperGenerator dgen)
-            throws IOException {
-        try (PrintWriter prw = new PrintWriter(
-                new BufferedWriter(
-                        new FileWriter(new File(dgen.getDomainObj().getName() + ".java")))))
-        {
-            prw.print(dgen.getDomainObj().toString());
-        }
-
-        try (PrintWriter prw = new PrintWriter(
-                new BufferedWriter(
-                        new FileWriter(new File(dgen.getRowMapper().getName() + ".java")))))
-        {
-            prw.print(dgen.getRowMapper().toString());
-        }
-    }
-
 }

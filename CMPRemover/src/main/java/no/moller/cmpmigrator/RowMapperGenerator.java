@@ -5,16 +5,10 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
-import org.jboss.forge.roaster.model.source.JavaInterfaceSource;
-import org.jboss.forge.roaster.model.source.MethodSource;
 import org.xml.sax.SAXException;
 
 public class RowMapperGenerator {
@@ -50,8 +44,9 @@ public class RowMapperGenerator {
     }
 
     /**
-     * Does the real work of generating interface and dao impl class.
-     * @param className
+     * Does the real work of generating domain and mapper classes.
+     *
+     * @param className Existing base class for entity
      *
      * @throws IOException
      * @throws SAXException
@@ -59,12 +54,10 @@ public class RowMapperGenerator {
     private void generate(String className) throws IOException, SAXException {
         final String classAsString = IOUtils.toString(new File(filePathToOldCode + className + "Bean.java").toURI(),
                 Charset.forName("ISO-8859-1"));
-
-        // Read existing ebj-HomeInterface
-        bean = Roaster.parse(JavaClassSource.class, classAsString);
-
         final String domObjName = className + "Dom";
 
+        // Read existing bean, and make domain-object out of it
+        bean = Roaster.parse(JavaClassSource.class, classAsString);
         purifyRemoveEjbLegacy(domObjName);
         bean.setName(domObjName);
 
@@ -113,7 +106,7 @@ public class RowMapperGenerator {
     private void implementMethods(final String className, String ejbjarDocAsString, String domObjName) throws SAXException, IOException {
 
         mapper.addMethod("public " + domObjName + " mapRow(final ResultSet rs, final int rowNum) {}")
-                .setBody(MethodBodyHelper.makeMapRow(className, ejbjarDocAsString, bean))
+                .setBody(RowMapperMethodBodyGenerator.makeMapRow(className, ejbjarDocAsString, bean))
                 .addThrows(java.sql.SQLException.class);
     }
 

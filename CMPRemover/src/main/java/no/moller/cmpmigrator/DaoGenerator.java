@@ -135,7 +135,7 @@ public class DaoGenerator {
 
         // Make an easier insert-method for all fields via domain-obj
         impl.addMethod("public boolean create(" + className + "Bean " + className.toLowerCase() + ") {}")
-                .setBody(MethodBodyHelper.makeCreateAll(className, ejbjarDocAsString))
+                .setBody(DaoMethodBodyGenerator.makeCreateAll(className, ejbjarDocAsString))
                 .addThrows(java.sql.SQLException.class);
     }
 
@@ -170,10 +170,10 @@ public class DaoGenerator {
             MethodSource<JavaInterfaceSource> met) throws SAXException, IOException {
 
         if(met.getName().startsWith("create")) {
-            return MethodBodyHelper.makeMethodBodyCreate(className, docAsString, met);
+            return DaoMethodBodyGenerator.makeMethodBodyCreate(className, docAsString, met);
         }
 
-        return MethodBodyHelper.makeMethodBodyFinder(className, docAsString, met);
+        return DaoMethodBodyGenerator.makeMethodBodyFinder(className, docAsString, met);
     }
 
 

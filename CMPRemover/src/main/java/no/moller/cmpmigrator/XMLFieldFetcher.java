@@ -8,28 +8,28 @@ import java.util.Collection;
 import org.xml.sax.SAXException;
 
 public class XMLFieldFetcher {
-	/**
-	 *  Parse xmi-file to match class/method/params and return the where-clause.
-	 *
-	 * @param docAsString
-	 * @param className
-	 * @param name
-	 * @param params
-	 * @return
-	 * @throws SAXException
-	 * @throws IOException
-	 */
+    /**
+     *  Parse xmi-file to match class/method/params and return the where-clause.
+     *
+     * @param docAsString
+     * @param className
+     * @param name
+     * @param params
+     * @return
+     * @throws SAXException
+     * @throws IOException
+     */
     public final static String retrieveWhereStatement(final String docAsString,
             final String className,
             final String name,
             final String params) throws SAXException, IOException {
 
         return $(docAsString).find("finderDescriptors")
-                    		 .filter(ctx -> $(ctx).child().attr("name").equalsIgnoreCase(name))
-                    		 .filter(ctx -> $(ctx).child().attr("parms").trim().equalsIgnoreCase(params))
-                    		 .filter(ctx -> $(ctx).child().child().attr("href").split("#")[1].equalsIgnoreCase(className))
-                    		 .attr("whereClause");
-	}
+                             .filter(ctx -> $(ctx).child().attr("name").equalsIgnoreCase(name))
+                             .filter(ctx -> $(ctx).child().attr("parms").trim().equalsIgnoreCase(params))
+                             .filter(ctx -> $(ctx).child().child().attr("href").split("#")[1].equalsIgnoreCase(className))
+                             .attr("whereClause");
+    }
 
     public static Collection<String> retrieveFields(String ejbjarDocAsString, String className) {
         return $(ejbjarDocAsString).find("entity")

@@ -8,18 +8,18 @@ import java.util.List;
 
 public class SafeReturn {
 
-    public SafeReturn() {
+    private SafeReturn() {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T ret(List<?> list, Class<T> retType) {
-        if(retType.equals(Enumeration.class)) {
+    public static <T> T ret(final List<?> list, final Class<T> retType) {
+        if (retType.equals(Enumeration.class)) {
             return (T) Collections.enumeration(list);
-        } else if(retType.equals(Iterator.class)) {
+        } else if (retType.equals(Iterator.class)) {
             return (T) list.iterator();
-        } else if(retType.equals(Collection.class)) {
+        } else if (retType.equals(Collection.class)) {
             return (T) list;
-        } else if(retType.equals(List.class)) {
+        } else if (retType.equals(List.class)) {
             return (T) list;
         } else {
             return retrieveSingle(list);
@@ -27,8 +27,8 @@ public class SafeReturn {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T> T retrieveSingle(List<?> list) {
-        if(list.isEmpty()) {
+    private static <T> T retrieveSingle(final List<?> list) {
+        if (list.isEmpty()) {
             return null;
         }
         return (T) list.get(0);
