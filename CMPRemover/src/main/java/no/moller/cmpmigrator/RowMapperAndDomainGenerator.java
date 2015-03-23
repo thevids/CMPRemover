@@ -72,8 +72,8 @@ public class RowMapperAndDomainGenerator {
                      .getJavaDoc().setFullText("Domain object.");
 
         bean.getMethods().stream()
-            .filter(m -> m.getName().startsWith("ejb"))
-            .forEach(m -> bean.removeMethod(m));
+                         .filter(m -> m.getName().startsWith("ejb"))
+                         .forEach(m -> bean.removeMethod(m));
 
         // Remove all things ejb from the method declarations
         bean.getMethods().forEach(
