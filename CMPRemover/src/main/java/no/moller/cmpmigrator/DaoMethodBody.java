@@ -37,7 +37,7 @@ public class DaoMethodBody {
 
         final StringBuilder str = new StringBuilder();
 
-        str.append("String whereSQL = \"" + namedParamWhereStatement + "\";\n\n")
+        str.append("String whereSQL = \" WHERE " + namedParamWhereStatement + "\";\n\n")
            .append("final MapSqlParameterSource parameters = new MapSqlParameterSource();\n");
 
         // Method parameters are to be mapped into sql
@@ -45,7 +45,7 @@ public class DaoMethodBody {
                             .forEach(p -> str.append("parameters.addValue(\"" + p.toLowerCase() + "\", " + p + ");\n"));
 
         str.append("\nreturn SafeReturn.ret("
-                + "mwinNamedTemplate.query(whereSQL, parameters, mapper)"
+                + "mwinNamedTemplate.query(SELECT + whereSQL, parameters, mapper)"
                 + ", " + met.getReturnType() +".class)"
                 + ";\n");
 

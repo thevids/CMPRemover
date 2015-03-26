@@ -48,6 +48,6 @@ public class StatementModifier {
 
         return "public final static String SELECT = \"select "
                     + fieldNamesCommaSeperated
-                    + " from " + SCHEAMNAME + className + " \"";
+                    + " from " + SCHEAMNAME + className + " T1 \"";
     }
 }

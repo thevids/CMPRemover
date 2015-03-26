@@ -24,21 +24,22 @@ public class RowMapperMethodBody {
     }
 
 
-    public static String makeMapRow(String className, String ejbjarDocAsString, JavaClassSource bean) {
+    public static String makeMapRow(String className, String ejbjarDocAsString, JavaClassSource bean, JavaClassSource key) {
         Collection<String> fields = XMLFieldFetcher.retrieveFields(ejbjarDocAsString, className);
 
         final String dom = className + "Dom";
         final String data = className + "Data";
+        final String pk = className + "Key";
 
         StringBuilder str = new StringBuilder();
         str.append(data + " data = new " + data + "();\n");
-        str.append("final " + className + "Key pk = new " + className + "Key(trim(rs.getString(\"insertYourFieldsHere\")), rs.getInt(\"insertid\"));\n");
+        str.append("final " + pk + " pk = new " + pk + "(trim(rs.getString(\"insertYourFieldsHere\")), rs.getInt(\"insertid\"));\n");
         str.append("data.setPrimaryKey(pk);\n");
 
         fields.stream()
             .forEach(p -> str.append(settify(p,  "data") + "(" + fieldRetriver(p, bean) + ");\n"));
 
-        str.append(dom + " domOjbect = new " + dom + "();\n")
+        str.append(dom + " domOjbect = new " + dom + "(pk);\n")
            .append("data.copyTo(domOjbect);\nreturn domOjbect;");
 
         System.err.println(str.toString());
@@ -46,13 +47,14 @@ public class RowMapperMethodBody {
     }
 
 
+    /** Making a resultset retrieve-command for the correct type of field. */
     private static String fieldRetriver(String field, JavaClassSource bean) {
         String get = "get" + enlargeFirsLetter(field);
         if(bean.hasMethodSignature(get)) {
             boolean doTrim = false;
             Type<JavaClassSource> returnType = bean.getMethod(get).getReturnType();
             if(returnType.isType(String.class)) {
-                doTrim = true;
+                doTrim = true; // Strings need trimming
             }
             String retType = returnType.getName();
             return "rs.get" +

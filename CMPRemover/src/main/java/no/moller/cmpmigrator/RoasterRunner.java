@@ -44,6 +44,8 @@ public final class RoasterRunner {
         writeToFiles(dgen.getDaoImpl());
         writeToFiles(dgen.getDaoInterface());
 
+//        System.out.println(dgen.getDaoInterface().toString());
+
         final RowMapperAndDomainGenerator rmGen = new RowMapperAndDomainGenerator(FILE_PATH_TO_OLD_CODE,
                 NEW_PACKAGE,
                 FILE_PATH_TO_OLD_XMI,

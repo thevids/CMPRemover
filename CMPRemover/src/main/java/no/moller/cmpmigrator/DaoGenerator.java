@@ -79,12 +79,15 @@ public class DaoGenerator {
     private void prettyReturnTypes(MethodHolderSource<?> source, String className) {
         homeInterface.getMethods().stream().filter(p -> p.getName().startsWith("find"))
                     .filter(p -> p.getReturnType().isType(Enumeration.class))
-                    .forEach(p -> p.setReturnType("Enumeration<" + className + ">"));
+                    .forEach(p -> p.setReturnType("Enumeration<" + className + "Dom" + ">"));
     }
 
     private void modifyInterface(final String className) {
         homeInterface.getMethods().stream().filter(p -> p.getName().startsWith("create"))
                                   .forEach(p -> p.addThrows(java.sql.SQLException.class));
+
+        homeInterface.getMethods().stream().filter(p -> p.getReturnType().isType(className))
+                                  .forEach(p -> p.setReturnType(className + "Dom"));
 
         homeInterface.addImport(Enumeration.class);
     }
@@ -150,8 +153,7 @@ public class DaoGenerator {
         impl.addField("private SimpleJdbcInsert simpleInsert")
             .addAnnotation(org.springframework.beans.factory.annotation.Autowired.class);
 
-        impl.addField("private RowMapper<List<Appointment>> mapper")
-            .addAnnotation(org.springframework.beans.factory.annotation.Autowired.class);
+        impl.addField("private RowMapper<" + className + "Dom> mapper = new " + className + "DomRowMapper();");
 
         impl.addField(StatementModifier.makeSelectStatement(className,
                                             XMLFieldFetcher.retrieveFields(ejbjarDocAsString, className)))

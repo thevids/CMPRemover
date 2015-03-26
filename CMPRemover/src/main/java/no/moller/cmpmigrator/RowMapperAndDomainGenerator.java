@@ -21,6 +21,7 @@ public class RowMapperAndDomainGenerator {
     // Produces these source-files
     private JavaClassSource bean;
     private JavaClassSource mapper;
+    private JavaClassSource key;
 
     /** Constructor that also does the job of generating the code. Fetch the generated code
      *  by calling the getters. Throws any exception, we want to fail fast as the end-user
@@ -54,17 +55,21 @@ public class RowMapperAndDomainGenerator {
     private void generate(String className) throws IOException, SAXException {
         final String classAsString = IOUtils.toString(new File(filePathToOldCode + className + "Bean.java").toURI(),
                 Charset.forName("ISO-8859-1"));
+        final String keyAsString = IOUtils.toString(new File(filePathToOldCode + className + "Key.java").toURI(),
+                Charset.forName("ISO-8859-1"));
+        key = Roaster.parse(JavaClassSource.class, keyAsString);
+
         final String domObjName = className + "Dom";
 
         // Read existing bean, and make domain-object out of it
         bean = Roaster.parse(JavaClassSource.class, classAsString);
-        purifyRemoveEjbLegacy(domObjName);
+        purifyDomainObjRemoveEjbLegacy(domObjName);
         bean.setName(domObjName);
 
         generateRowMapper(className, domObjName);
     }
 
-    private void purifyRemoveEjbLegacy(final String domName) {
+    private void purifyDomainObjRemoveEjbLegacy(final String domName) {
         // Remove all things ejb from the class declarations
         bean.removeInterface("javax.ejb.EntityBean")
                      .setPackage(newPackage)
@@ -96,7 +101,7 @@ public class RowMapperAndDomainGenerator {
 
         mapper.setName(domObjName + "RowMapper")
             .setPackage(newPackage)
-            .addInterface("UtilRowMapper<" + domObjName + ">")
+            .setSuperType("UtilRowMapper<" + domObjName + ">")
             .getJavaDoc().setText("Rowmapper for JdbcDao");
 
         implementMethods(className, ejbjarDocAsString, domObjName);
@@ -105,7 +110,7 @@ public class RowMapperAndDomainGenerator {
     private void implementMethods(final String className, String ejbjarDocAsString, String domObjName) throws SAXException, IOException {
 
         mapper.addMethod("public " + domObjName + " mapRow(final ResultSet rs, final int rowNum) {}")
-                .setBody(RowMapperMethodBody.makeMapRow(className, ejbjarDocAsString, bean))
+                .setBody(RowMapperMethodBody.makeMapRow(className, ejbjarDocAsString, bean, key))
                 .addThrows(java.sql.SQLException.class);
     }
 
