@@ -1,8 +1,10 @@
 package no.moller.cmpmigrator;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.jboss.forge.roaster.model.Type;
+import org.jboss.forge.roaster.model.source.FieldSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 public class RowMapperMethodBody {
@@ -33,7 +35,15 @@ public class RowMapperMethodBody {
 
         StringBuilder str = new StringBuilder();
         str.append(data + " data = new " + data + "();\n");
-        str.append("final " + pk + " pk = new " + pk + "(trim(rs.getString(\"insertYourFieldsHere\")), rs.getInt(\"insertid\"));\n");
+
+        // Primary-key-fields will be retrieved into a PrimaryKey object
+        str.append("final " + pk + " pk = new " + pk)
+           .append("(")
+           .append(key.getFields().stream()
+                                   .map((f -> fieldRetriverPK(f, key)) )
+                                   .collect(Collectors.joining(", ")) )
+           .append(");\n");
+
         str.append("data.setPrimaryKey(pk);\n");
 
         fields.stream()
@@ -42,7 +52,6 @@ public class RowMapperMethodBody {
         str.append(dom + " domOjbect = new " + dom + "(pk);\n")
            .append("data.copyTo(domOjbect);\nreturn domOjbect;");
 
-        System.err.println(str.toString());
         return str.toString();
     }
 
@@ -66,6 +75,21 @@ public class RowMapperMethodBody {
         return null;
     }
 
+    /** Making a resultset retrieve-command for the correct type of field. */
+    private static String fieldRetriverPK(FieldSource<JavaClassSource> field, JavaClassSource key) {
+//        String get = "get" + enlargeFirsLetter(field);
+        boolean doTrim = false;
+        Type<JavaClassSource> returnType = field.getType();
+        if(returnType.isType(String.class)) {
+            doTrim = true; // Strings need trimming
+        }
+        String retType = returnType.getName();
+        return "rs.get" +
+                removePath(retType) + "(" +
+                (doTrim ? "trim(": "") + "\"" +
+                field.getName().toUpperCase() +"\")" +
+                (doTrim ? ")": "");
+    }
 
     /** Remove all package-path before type-name. */
     private static String removePath(String retType) {

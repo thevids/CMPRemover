@@ -1,9 +1,13 @@
 package no.moller.cmpmigrator;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
+import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaInterfaceSource;
 import org.jboss.forge.roaster.model.source.MethodSource;
 import org.xml.sax.SAXException;
@@ -79,17 +83,20 @@ public class DaoMethodBody {
      *
      * @param className Name of the domain class
      * @param ejbjarDocAsString ejb-jar.xml in a string
+     * @param key Primary Key
      * @return body of create method
      */
-    public static String makeCreateAll(String className, String ejbjarDocAsString) {
+    public static String makeCreateAll(String className, String ejbjarDocAsString, JavaClassSource key) {
         Collection<String> fields = XMLFieldFetcher.retrieveFields(ejbjarDocAsString, className);
+        List<Object> keyFields = Arrays.asList(key.getFields().stream().map(p -> p.getName()).toArray());
 
         StringBuilder str = new StringBuilder();
         str.append("Map<String,Object> parameters = new HashMap<String,Object>();\n");
 
         // Method parameters are to be mapped into db, simplejdbcinsert takes a hash-map
         fields.stream()
-            .forEach(p -> str.append("parameters.put(\"" + p.toUpperCase() + "\", " + gettify(p, className) + ");\n"));
+            .filter(p -> !keyFields.contains(p))
+            .forEach(p -> str.append("parameters.put(\"" + p.toUpperCase() + "\", " + FieldNameTool.gettify(p, className) + ");\n"));
 
         String insertException = "throw new SQLException(\"Failure to insert \" + "
                 + className.toLowerCase().toString() + ");";
@@ -103,13 +110,45 @@ public class DaoMethodBody {
         return str.toString();
     }
 
-    protected static String enlargeFirsLetter(String field) {
-        return field.substring(0, 1).toUpperCase() + field.substring(1);
+
+    public static String makeRemoveMethod(String className, JavaClassSource key) {
+        // Method parameters are to be mapped into db, simplejdbcinsert takes a hash-map
+        String parametersAdding = key.getFields().stream()
+            .filter(p -> !p.getName().equalsIgnoreCase("serialVersionUID"))
+            .map(p -> "parameters.addValue(\"" + p.getName().toLowerCase() + "\", pk." + p.getName() + ");\n")
+            .collect(Collectors.joining());
+
+        return "String sql = \"DELETE FROM MWIN." + className.toUpperCase()
+                + " T1 WHERE "
+                + namedKeyQuery(key) + "\"; "
+                + "final MapSqlParameterSource parameters = new MapSqlParameterSource();"
+                + parametersAdding
+                + "return mwinNamedTemplate.update(sql, parameters);";
     }
 
-    /** Makes a getter-call out of a fieldname. */
-    protected static String gettify(String field, String className) {
-        String get = "get" + enlargeFirsLetter(field);
-        return className.toLowerCase() + "." + get + "()";
+
+    private static String namedKeyQuery(JavaClassSource key) {
+        return key.getFields().stream()
+           .filter(p -> !p.getName().equalsIgnoreCase("serialVersionUID"))
+           .map(p -> " T1." + p.getName().toUpperCase() + " = :" + p.getName().toLowerCase() + " ")
+           .collect(Collectors.joining(" AND "));
+    }
+
+    public static String makeFindByPK(String className, JavaClassSource key) {
+        // Method parameters are to be mapped into db, simplejdbcinsert takes a hash-map
+        String parametersAdding = key.getFields().stream()
+            .filter(p -> !p.getName().equalsIgnoreCase("serialVersionUID"))
+            .map(p -> "parameters.addValue(\"" + p.getName().toLowerCase() + "\", key." + p.getName() + ");\n")
+            .collect(Collectors.joining());
+
+        // TODO: Parametiser navnene på nøkkel, felt og klasse!
+        return "String whereSQL = \" "
+                + " T1 WHERE "
+                + namedKeyQuery(key) + "\";\n"
+                + "final MapSqlParameterSource parameters = new MapSqlParameterSource();"
+                + parametersAdding
+                + "return SafeReturn.ret("
+                + "mwinNamedTemplate.query(SELECT + whereSQL, parameters, mapper), "
+                + className + "Dom.class);";
     }
 }

@@ -5,11 +5,11 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 
-public class MethodBodyHelperTest {
+public class FieldNameToolTest {
 
     @Test
     public void testGettify() {
-        String gettify = DaoMethodBody.gettify("hoursWorked", "Appointment");
+        String gettify = FieldNameTool.gettify("hoursWorked", "Appointment");
         Assert.assertEquals("appointment.getHoursWorked()", gettify);
     }
 }

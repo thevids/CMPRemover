@@ -27,6 +27,7 @@ public class DaoGenerator {
     // Produces these source-files
     private JavaInterfaceSource homeInterface;
     private JavaClassSource impl;
+    private JavaClassSource key;
 
     /** Constructor that also does the job of generating the code. Fetch the generated code
      *  by calling the getters. Throws any exception, we want to fail fast as the end-user
@@ -59,6 +60,9 @@ public class DaoGenerator {
     private void generate(String className) throws IOException, SAXException {
         final String classAsString = IOUtils.toString(new File(filePathToOldCode + className + "Home.java").toURI(),
                 Charset.forName("ISO-8859-1"));
+        final String keyAsString = IOUtils.toString(new File(filePathToOldCode + className + "Key.java").toURI(),
+                Charset.forName("ISO-8859-1"));
+        key = Roaster.parse(JavaClassSource.class, keyAsString);
 
         // Read existing ebj-HomeInterface
         homeInterface = Roaster.parse(JavaInterfaceSource.class, classAsString);
@@ -88,6 +92,11 @@ public class DaoGenerator {
 
         homeInterface.getMethods().stream().filter(p -> p.getReturnType().isType(className))
                                   .forEach(p -> p.setReturnType(className + "Dom"));
+
+        homeInterface.addMethod()
+                     .setName("remove")
+                     .setReturnType("int")
+                     .setParameters(className + "Key pk");
 
         homeInterface.addImport(Enumeration.class);
     }
@@ -142,7 +151,7 @@ public class DaoGenerator {
 
         // Make an easier insert-method for all fields via domain-obj
         impl.addMethod("public boolean create(" + className + "Bean " + className.toLowerCase() + ") {}")
-                .setBody(DaoMethodBody.makeCreateAll(className, ejbjarDocAsString))
+                .setBody(DaoMethodBody.makeCreateAll(className, ejbjarDocAsString, key))
                 .addThrows(java.sql.SQLException.class);
     }
 
@@ -177,6 +186,10 @@ public class DaoGenerator {
 
         if(met.getName().startsWith("create")) {
             return DaoMethodBody.makeMethodBodyCreate(className, docAsString, met);
+        } else if (met.getName().equals("remove")) {
+            return DaoMethodBody.makeRemoveMethod(className, key);
+        } else if(met.getName().startsWith("findByPrimaryKey") ) {
+            return DaoMethodBody.makeFindByPK(className, key);
         }
 
         return DaoMethodBody.makeMethodBodyFinder(className, docAsString, met);

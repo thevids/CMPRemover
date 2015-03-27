@@ -64,9 +64,16 @@ public class RowMapperAndDomainGenerator {
         // Read existing bean, and make domain-object out of it
         bean = Roaster.parse(JavaClassSource.class, classAsString);
         purifyDomainObjRemoveEjbLegacy(domObjName);
+        improveDomainObject(className);
         bean.setName(domObjName);
 
         generateRowMapper(className, domObjName);
+    }
+
+    private void improveDomainObject(final String className) {
+        DomainObjMethodBody.makeConstructorAndFieldWithPrimaryKey(className, bean, key);
+        DomainObjMethodBody.makePrimaryKeyFieldGetters(key, bean);
+
     }
 
     private void purifyDomainObjRemoveEjbLegacy(final String domName) {
@@ -104,10 +111,11 @@ public class RowMapperAndDomainGenerator {
             .setSuperType("UtilRowMapper<" + domObjName + ">")
             .getJavaDoc().setText("Rowmapper for JdbcDao");
 
-        implementMethods(className, ejbjarDocAsString, domObjName);
+        implementMapperMethod(className, ejbjarDocAsString, domObjName);
     }
 
-    private void implementMethods(final String className, String ejbjarDocAsString, String domObjName) throws SAXException, IOException {
+    private void implementMapperMethod(final String className, String ejbjarDocAsString, String domObjName)
+            throws SAXException, IOException {
 
         mapper.addMethod("public " + domObjName + " mapRow(final ResultSet rs, final int rowNum) {}")
                 .setBody(RowMapperMethodBody.makeMapRow(className, ejbjarDocAsString, bean, key))

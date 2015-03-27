@@ -34,14 +34,16 @@ public class DaoGeneratorTest {
         JavaClassSource impl = dgen.getDaoImpl();
         List<MethodSource<JavaClassSource>> methods = impl.getMethods();
         for (MethodSource<JavaClassSource> met : methods) {
-			if(met.getName().startsWith("find") && !met.getName().equals("findByPrimaryKey")) {
+			if(met.getName().startsWith("find")) {
 
 				assertNotNull(met.getBody());
 				assertTrue("Body should contain a where-statement", met.getBody().indexOf("whereSQL") > -1);
 			} else if(met.getName().startsWith("create")) {
-			    assertTrue("Body of create should contain a execute-call", met.getBody().indexOf("execute(") > -1);
+			    assertTrue("Body of create should contain an execute-call", met.getBody().indexOf("execute(") > -1);
+            } else if(met.getName().startsWith("remove")) {
+                assertTrue("Body of remove should contain an update-call", met.getBody().indexOf("update(") > -1);
 			} else {
-				assertTrue("Shold have UnsupportedOperationException if no where-statement",
+				assertTrue("Shold have UnsupportedOperationException if no where-statement: " + met.getName(),
 						met.getBody().contains("UnsupportedOperationException"));
 			}
 		}
