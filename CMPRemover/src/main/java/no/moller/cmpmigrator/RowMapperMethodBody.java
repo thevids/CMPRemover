@@ -40,6 +40,7 @@ public class RowMapperMethodBody {
         str.append("final " + pk + " pk = new " + pk)
            .append("(")
            .append(key.getFields().stream()
+                                   .filter(f -> !f.getName().equalsIgnoreCase("serialVersionUid"))
                                    .map((f -> fieldRetriverPK(f, key)) )
                                    .collect(Collectors.joining(", ")) )
            .append(");\n");
