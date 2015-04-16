@@ -65,7 +65,7 @@ public class DaoMethodBody {
 
         // Method parameters are to be mapped into db, simplejdbcinsert takes a hash-map
         met.getParameters().stream().map(p -> p.getName())
-            .forEach(p -> str.append("parameters.put(\"" + p.toUpperCase() + "\", " + p + ");\n"));
+            .forEach(p -> str.append("parameters.put(\"" + fieldnameify(p) + "\", " + p + ");\n"));
 
         String insertException = "throw new SQLException(\"Failure to insert \" + "
                 + met.getParameters().stream().map( p -> p.getName() ).collect(Collectors.joining(" + ")) + ");";
@@ -75,6 +75,14 @@ public class DaoMethodBody {
            .append("if (nr==0) { ").append(insertException).append("}")
            .append("return null;\n"); // We will just smoke out who uses this reference, its detached data now
         return str.toString();
+    }
+
+    /* Takes and argument name and extracts the most likely db-field-name. */
+    private static String fieldnameify(String p) {
+        if(p.startsWith("arg")) {
+            return p.substring(3).toUpperCase();
+        }
+        return p.toUpperCase();
     }
 
 
@@ -96,7 +104,7 @@ public class DaoMethodBody {
         // Method parameters are to be mapped into db, simplejdbcinsert takes a hash-map
         fields.stream()
             .filter(p -> !keyFields.contains(p))
-            .forEach(p -> str.append("parameters.put(\"" + p.toUpperCase() + "\", " + FieldNameTool.gettify(p, className) + ");\n"));
+            .forEach(p -> str.append("parameters.put(\"" + fieldnameify(p) + "\", " + FieldNameTool.gettify(p, className) + ");\n"));
 
         String insertException = "throw new SQLException(\"Failure to insert \" + "
                 + className.toLowerCase().toString() + ");";
@@ -118,7 +126,7 @@ public class DaoMethodBody {
             .map(p -> "parameters.addValue(\"" + p.getName().toLowerCase() + "\", pk." + p.getName() + ");\n")
             .collect(Collectors.joining());
 
-        return "String sql = \"DELETE FROM MWIN." + className.toUpperCase()
+        return "String sql = \"DELETE FROM MWIN." + fieldnameify(className)
                 + " T1 WHERE "
                 + namedKeyQuery(key) + "\"; "
                 + "final MapSqlParameterSource parameters = new MapSqlParameterSource();"
