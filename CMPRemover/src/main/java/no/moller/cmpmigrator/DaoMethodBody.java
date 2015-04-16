@@ -103,7 +103,7 @@ public class DaoMethodBody {
 
         // Method parameters are to be mapped into db, simplejdbcinsert takes a hash-map
         fields.stream()
-            .filter(p -> !keyFields.contains(p))
+//            .filter(p -> !keyFields.contains(p))
             .forEach(p -> str.append("parameters.put(\"" + fieldnameify(p) + "\", " + FieldNameTool.gettify(p, className) + ");\n"));
 
         String insertException = "throw new SQLException(\"Failure to insert \" + "

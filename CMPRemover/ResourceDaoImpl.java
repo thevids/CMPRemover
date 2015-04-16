@@ -20,7 +20,6 @@ public class ResourceDaoImpl implements ResourceDao
 
    @Autowired
    private NamedParameterJdbcTemplate mwinNamedTemplate;
-   @Autowired
    private SimpleJdbcInsert simpleInsert;
    private RowMapper<ResourceDom> mapper = new ResourceDomRowMapper();
    /**
@@ -32,8 +31,8 @@ public class ResourceDaoImpl implements ResourceDao
          throws SQLException
    {
       Map<String, Object> parameters = new HashMap<String, Object>();
-      parameters.put("ARGFNR", argFnr);
-      parameters.put("ARGRESOURCEID", argResourceID);
+      parameters.put("FNR", argFnr);
+      parameters.put("RESOURCEID", argResourceID);
       int nr = simpleInsert.execute(parameters);
       if (nr == 0)
       {
@@ -50,15 +49,15 @@ public class ResourceDaoImpl implements ResourceDao
          throws SQLException
    {
       Map<String, Object> parameters = new HashMap<String, Object>();
-      parameters.put("ARGFNR", argFnr);
-      parameters.put("ARGNAME", argName);
-      parameters.put("ARGTYPE", argType);
-      parameters.put("ARGFROM", argFrom);
-      parameters.put("ARGTO", argTo);
-      parameters.put("ARGREF", argRef);
-      parameters.put("ARGCREATEDBY", argCreatedBy);
-      parameters.put("ARGDATECREATED", argDateCreated);
-      parameters.put("ARGCOMMENT", argComment);
+      parameters.put("FNR", argFnr);
+      parameters.put("NAME", argName);
+      parameters.put("TYPE", argType);
+      parameters.put("FROM", argFrom);
+      parameters.put("TO", argTo);
+      parameters.put("REF", argRef);
+      parameters.put("CREATEDBY", argCreatedBy);
+      parameters.put("DATECREATED", argDateCreated);
+      parameters.put("COMMENT", argComment);
       int nr = simpleInsert.execute(parameters);
       if (nr == 0)
       {
@@ -77,19 +76,19 @@ public class ResourceDaoImpl implements ResourceDao
          boolean argPlanConnected, int argPlanID) throws SQLException
    {
       Map<String, Object> parameters = new HashMap<String, Object>();
-      parameters.put("ARGFNR", argFnr);
-      parameters.put("ARGNAME", argName);
-      parameters.put("ARGTYPE", argType);
-      parameters.put("ARGFROM", argFrom);
-      parameters.put("ARGTO", argTo);
-      parameters.put("ARGREF", argRef);
-      parameters.put("ARGCREATEDBY", argCreatedBy);
-      parameters.put("ARGDATECREATED", argDateCreated);
-      parameters.put("ARGCOMMENT", argComment);
-      parameters.put("ARGSKILLTYPES", argSkillTypes);
-      parameters.put("ARGBRANDTYPES", argBrandTypes);
-      parameters.put("ARGPLANCONNECTED", argPlanConnected);
-      parameters.put("ARGPLANID", argPlanID);
+      parameters.put("FNR", argFnr);
+      parameters.put("NAME", argName);
+      parameters.put("TYPE", argType);
+      parameters.put("FROM", argFrom);
+      parameters.put("TO", argTo);
+      parameters.put("REF", argRef);
+      parameters.put("CREATEDBY", argCreatedBy);
+      parameters.put("DATECREATED", argDateCreated);
+      parameters.put("COMMENT", argComment);
+      parameters.put("SKILLTYPES", argSkillTypes);
+      parameters.put("BRANDTYPES", argBrandTypes);
+      parameters.put("PLANCONNECTED", argPlanConnected);
+      parameters.put("PLANID", argPlanID);
       int nr = simpleInsert.execute(parameters);
       if (nr == 0)
       {
@@ -110,20 +109,20 @@ public class ResourceDaoImpl implements ResourceDao
          java.lang.String argMnetMekID) throws SQLException
    {
       Map<String, Object> parameters = new HashMap<String, Object>();
-      parameters.put("ARGFNR", argFnr);
-      parameters.put("ARGNAME", argName);
-      parameters.put("ARGTYPE", argType);
-      parameters.put("ARGFROM", argFrom);
-      parameters.put("ARGTO", argTo);
-      parameters.put("ARGREF", argRef);
-      parameters.put("ARGCREATEDBY", argCreatedBy);
-      parameters.put("ARGDATECREATED", argDateCreated);
-      parameters.put("ARGCOMMENT", argComment);
-      parameters.put("ARGSKILLTYPES", argSkillTypes);
-      parameters.put("ARGBRANDTYPES", argBrandTypes);
-      parameters.put("ARGPLANCONNECTED", argPlanConnected);
-      parameters.put("ARGPLANID", argPlanID);
-      parameters.put("ARGMNETMEKID", argMnetMekID);
+      parameters.put("FNR", argFnr);
+      parameters.put("NAME", argName);
+      parameters.put("TYPE", argType);
+      parameters.put("FROM", argFrom);
+      parameters.put("TO", argTo);
+      parameters.put("REF", argRef);
+      parameters.put("CREATEDBY", argCreatedBy);
+      parameters.put("DATECREATED", argDateCreated);
+      parameters.put("COMMENT", argComment);
+      parameters.put("SKILLTYPES", argSkillTypes);
+      parameters.put("BRANDTYPES", argBrandTypes);
+      parameters.put("PLANCONNECTED", argPlanConnected);
+      parameters.put("PLANID", argPlanID);
+      parameters.put("MNETMEKID", argMnetMekID);
       int nr = simpleInsert.execute(parameters);
       if (nr == 0)
       {
@@ -208,20 +207,20 @@ public class ResourceDaoImpl implements ResourceDao
          String argMnetMekID, int sortering) throws SQLException
    {
       Map<String, Object> parameters = new HashMap<String, Object>();
-      parameters.put("ARGFNR", argFnr);
-      parameters.put("ARGNAME", argName);
-      parameters.put("ARGTYPE", argType);
-      parameters.put("ARGFROM", argFrom);
-      parameters.put("ARGTO", argTo);
-      parameters.put("ARGREF", argRef);
-      parameters.put("ARGCREATEDBY", argCreatedBy);
-      parameters.put("ARGDATECREATED", argDateCreated);
-      parameters.put("ARGCOMMENT", argComment);
-      parameters.put("ARGSKILLTYPES", argSkillTypes);
-      parameters.put("ARGBRANDTYPES", argBrandTypes);
-      parameters.put("ARGPLANCONNECTED", argPlanConnected);
-      parameters.put("ARGPLANID", argPlanID);
-      parameters.put("ARGMNETMEKID", argMnetMekID);
+      parameters.put("FNR", argFnr);
+      parameters.put("NAME", argName);
+      parameters.put("TYPE", argType);
+      parameters.put("FROM", argFrom);
+      parameters.put("TO", argTo);
+      parameters.put("REF", argRef);
+      parameters.put("CREATEDBY", argCreatedBy);
+      parameters.put("DATECREATED", argDateCreated);
+      parameters.put("COMMENT", argComment);
+      parameters.put("SKILLTYPES", argSkillTypes);
+      parameters.put("BRANDTYPES", argBrandTypes);
+      parameters.put("PLANCONNECTED", argPlanConnected);
+      parameters.put("PLANID", argPlanID);
+      parameters.put("MNETMEKID", argMnetMekID);
       parameters.put("SORTERING", sortering);
       int nr = simpleInsert.execute(parameters);
       if (nr == 0)
@@ -263,12 +262,14 @@ public class ResourceDaoImpl implements ResourceDao
       parameters.put("AVAILABLETO", resource.getAvailableTo());
       parameters.put("PLANCONNECTED", resource.getPlanConnected());
       parameters.put("DATECHANGED", resource.getDateChanged());
+      parameters.put("RESOURCEID", resource.getResourceID());
       parameters.put("MNETMEKID", resource.getMnetMekID());
       parameters.put("PLANID", resource.getPlanID());
       parameters.put("CHANGEDBY", resource.getChangedBy());
       parameters.put("RESOURCENAME", resource.getResourceName());
       parameters.put("RESOURCEGROUPREF", resource.getResourceGroupRef());
       parameters.put("BRANDTYPES", resource.getBrandTypes());
+      parameters.put("FNR", resource.getFnr());
       parameters.put("SORTERING", resource.getSortering());
       parameters.put("COLORTYPE", resource.getColortype());
       parameters.put("WORKEFFECTIVITY", resource.getWorkEffectivity());

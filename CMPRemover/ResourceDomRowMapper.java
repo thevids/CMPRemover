@@ -15,7 +15,7 @@ public class ResourceDomRowMapper extends UtilRowMapper<ResourceDom>
    {
       ResourceData data = new ResourceData();
       final ResourceKey pk = new ResourceKey(rs.getString(trim("FNR")),
-            rs.getInt("RESOURCEID"), rs.getLong("SERIALVERSIONUID"));
+            rs.getInt("RESOURCEID"));
       data.setPrimaryKey(pk);
       data.setDateCreated(rs.getString(trim("DATECREATED")));
       data.setResourceType(rs.getInt("RESOURCETYPE"));

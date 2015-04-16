@@ -159,8 +159,7 @@ public class DaoGenerator {
         impl.addField("private NamedParameterJdbcTemplate mwinNamedTemplate")
               .addAnnotation(org.springframework.beans.factory.annotation.Autowired.class);
 
-        impl.addField("private SimpleJdbcInsert simpleInsert")
-            .addAnnotation(org.springframework.beans.factory.annotation.Autowired.class);
+        impl.addField("private SimpleJdbcInsert simpleInsert");
 
         impl.addField("private RowMapper<" + className + "Dom> mapper = new " + className + "DomRowMapper();");
 
