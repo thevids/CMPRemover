@@ -71,9 +71,7 @@ public class RowMapperAndDomainGenerator {
     }
 
     private void improveDomainObject(final String className) {
-        DomainObjMethodBody.makeConstructorAndFieldWithPrimaryKey(className, bean, key);
-        DomainObjMethodBody.makePrimaryKeyFieldGetters(key, bean);
-
+        DomainObjMethodBody.makePrimaryKeyFieldGettersAndSetters(key, bean);
     }
 
     private void purifyDomainObjRemoveEjbLegacy(final String domName) {
@@ -84,7 +82,7 @@ public class RowMapperAndDomainGenerator {
                      .getJavaDoc().setFullText("Domain object.");
 
         bean.getMethods().stream()
-                         .filter(m -> m.getName().startsWith("ejb"))
+                         .filter(m -> m.getName().startsWith("ejb") || m.getName().startsWith("_"))
                          .forEach(m -> bean.removeMethod(m));
 
         // Remove all things ejb from the method declarations
@@ -107,9 +105,9 @@ public class RowMapperAndDomainGenerator {
         addImports();
 
         mapper.setName(domObjName + "RowMapper")
-            .setPackage(newPackage)
-            .setSuperType("UtilRowMapper<" + domObjName + ">")
-            .getJavaDoc().setText("Rowmapper for JdbcDao");
+              .setPackage(newPackage)
+              .setSuperType("UtilRowMapper<" + domObjName + ">")
+              .getJavaDoc().setText("Rowmapper for JdbcDao");
 
         implementMapperMethod(className, ejbjarDocAsString, domObjName);
     }
