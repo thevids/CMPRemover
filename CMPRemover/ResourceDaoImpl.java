@@ -137,7 +137,7 @@ public class ResourceDaoImpl implements ResourceDao
 
    public ResourceDom findByPrimaryKey(no.moller.evp.model.ejb.ResourceKey key)
    {
-      String whereSQL = "  T1 WHERE  T1.FNR = :fnr  AND  T1.RESOURCEID = :resourceid ";
+      String whereSQL = "  WHERE  T1.FNR = :fnr  AND  T1.RESOURCEID = :resourceid ";
       final MapSqlParameterSource parameters = new MapSqlParameterSource();
       parameters.addValue("fnr", key.fnr);
       parameters.addValue("resourceid", key.resourceID);
@@ -172,29 +172,23 @@ public class ResourceDaoImpl implements ResourceDao
             ResourceDom.class);
    }
 
-   public java.util.Enumeration findResources(java.lang.String argFnr)
+   public Enumeration<ResourceDom> findResources(java.lang.String argFnr)
    {
-      String whereSQL = " WHERE T1.FNR = :argfnr";
-      final MapSqlParameterSource parameters = new MapSqlParameterSource();
-      parameters.addValue("argfnr", argFnr);
-      return SafeReturn.ret(
-            mwinNamedTemplate.query(SELECT + whereSQL, parameters, mapper),
-            java.util.Enumeration.class);
    }
 
-   public java.util.Enumeration findResourcesByShiftPlan(String argFnr,
+   public Enumeration<ResourceDom> findResourcesByShiftPlan(String argFnr,
          int argPlanID)
    {
       throw new java.lang.UnsupportedOperationException("Not yet implemented");
    }
 
-   public java.util.Enumeration findResourcesBySkills(String argFnr,
+   public Enumeration<ResourceDom> findResourcesBySkills(String argFnr,
          String argSkills)
    {
       throw new java.lang.UnsupportedOperationException("Not yet implemented");
    }
 
-   public java.util.Enumeration findResourcesInGroup(String argFnr,
+   public Enumeration<ResourceDom> findResourcesInGroup(String argFnr,
          int argResourceGroupRef)
    {
       throw new java.lang.UnsupportedOperationException("Not yet implemented");
@@ -234,7 +228,7 @@ public class ResourceDaoImpl implements ResourceDao
       return null;
    }
 
-   public java.util.Enumeration findAllResources()
+   public Enumeration<ResourceDom> findAllResources()
    {
       throw new java.lang.UnsupportedOperationException("Not yet implemented");
    }
@@ -288,5 +282,10 @@ public class ResourceDaoImpl implements ResourceDao
          throw new SQLException("Failure to insert " + resource);
       }
       return true;
+   }
+
+   public void setSimpleInsert(SimpleJdbcInsert sji)
+   {
+      simpleInsert = sji;
    }
 }

@@ -73,120 +73,6 @@ public class ResourceDom implements no.moller.evp.model.ejb.ResourceData.Store
    public boolean toolCompensation;
    private final ResourceKey pk;
 
-   /* WARNING: THIS METHOD WILL BE REGENERATED. */
-   public java.util.Hashtable _copyFromEJB()
-   {
-      com.ibm.ivj.ejb.runtime.AccessBeanHashtable h = new com.ibm.ivj.ejb.runtime.AccessBeanHashtable();
-
-      h.put("dateCreated", getDateCreated());
-      h.put("resourceType", new Integer(getResourceType()));
-      h.put("resourceName", getResourceName());
-      h.put("skillTypes", getSkillTypes());
-      h.put("comment", getComment());
-      h.put("timeStampCreated", getTimeStampCreated());
-      h.put("planConnected", new Boolean(getPlanConnected()));
-      h.put("dateChanged", getDateChanged());
-      h.put("availableTo", getAvailableTo());
-      h.put("groupPlan", new Boolean(getGroupPlan()));
-      h.put("brandTypes", getBrandTypes());
-      h.put("planID", new Integer(getPlanID()));
-      h.put("changedBy", getChangedBy());
-      h.put("resourceGroupRef", new Integer(getResourceGroupRef()));
-      h.put("mnetMekID", getMnetMekID());
-      h.put("availableFrom", getAvailableFrom());
-      h.put("createdBy", getCreatedBy());
-      h.put("__Key", getEntityContext().getPrimaryKey());
-
-      return h;
-
-   }
-
-   /* WARNING: THIS METHOD WILL BE REGENERATED. */
-   public void _copyToEJB(java.util.Hashtable h)
-   {
-      java.lang.String localDateCreated = (java.lang.String) h.get("dateCreated");
-      Integer localResourceType = (Integer) h.get("resourceType");
-      java.lang.String localResourceName = (java.lang.String) h.get("resourceName");
-      java.lang.String localSkillTypes = (java.lang.String) h.get("skillTypes");
-      java.lang.String localComment = (java.lang.String) h.get("comment");
-      java.sql.Timestamp localTimeStampCreated = (java.sql.Timestamp) h.get("timeStampCreated");
-      Boolean localPlanConnected = (Boolean) h.get("planConnected");
-      java.lang.String localDateChanged = (java.lang.String) h.get("dateChanged");
-      java.lang.String localAvailableTo = (java.lang.String) h.get("availableTo");
-      Boolean localGroupPlan = (Boolean) h.get("groupPlan");
-      java.lang.String localBrandTypes = (java.lang.String) h.get("brandTypes");
-      Integer localPlanID = (Integer) h.get("planID");
-      java.lang.String localChangedBy = (java.lang.String) h.get("changedBy");
-      Integer localResourceGroupRef = (Integer) h.get("resourceGroupRef");
-      java.lang.String localMnetMekID = (java.lang.String) h.get("mnetMekID");
-      java.lang.String localAvailableFrom = (java.lang.String) h.get("availableFrom");
-      java.lang.String localCreatedBy = (java.lang.String) h.get("createdBy");
-
-      if (h.containsKey("dateCreated"))
-         setDateCreated((localDateCreated));
-      if (h.containsKey("resourceType"))
-         setResourceType((localResourceType).intValue());
-      if (h.containsKey("resourceName"))
-         setResourceName((localResourceName));
-      if (h.containsKey("skillTypes"))
-         setSkillTypes((localSkillTypes));
-      if (h.containsKey("comment"))
-         setComment((localComment));
-      if (h.containsKey("timeStampCreated"))
-         setTimeStampCreated((localTimeStampCreated));
-      if (h.containsKey("planConnected"))
-         setPlanConnected((localPlanConnected).booleanValue());
-      if (h.containsKey("dateChanged"))
-         setDateChanged((localDateChanged));
-      if (h.containsKey("availableTo"))
-         setAvailableTo((localAvailableTo));
-      if (h.containsKey("groupPlan"))
-         setGroupPlan((localGroupPlan).booleanValue());
-      if (h.containsKey("brandTypes"))
-         setBrandTypes((localBrandTypes));
-      if (h.containsKey("planID"))
-         setPlanID((localPlanID).intValue());
-      if (h.containsKey("changedBy"))
-         setChangedBy((localChangedBy));
-      if (h.containsKey("resourceGroupRef"))
-         setResourceGroupRef((localResourceGroupRef).intValue());
-      if (h.containsKey("mnetMekID"))
-         setMnetMekID((localMnetMekID));
-      if (h.containsKey("availableFrom"))
-         setAvailableFrom((localAvailableFrom));
-      if (h.containsKey("createdBy"))
-         setCreatedBy((localCreatedBy));
-
-   }
-
-   /* WARNING: THIS METHOD WILL BE REGENERATED. */
-   protected java.util.Vector _getLinks()
-   {
-      java.util.Vector links = new java.util.Vector();
-      return links;
-   }
-
-   /* WARNING: THIS METHOD WILL BE REGENERATED. */
-   protected void _initLinks()
-   {
-   }
-
-   /* WARNING: THIS METHOD WILL BE REGENERATED. */
-   protected void _removeLinks()
-   {
-      java.util.Enumeration links = _getLinks().elements();
-      while (links.hasMoreElements())
-      {
-         try
-         {
-            ((com.ibm.ivj.ejb.associations.interfaces.Link) (links.nextElement())).remove();
-         }
-         catch (javax.ejb.FinderException e)
-         {
-         } //Consume Finder error since I am going away
-      }
-   }
-
    public java.lang.String getAvailableFrom()
    {
       return availableFrom;
@@ -667,7 +553,7 @@ public class ResourceDom implements no.moller.evp.model.ejb.ResourceData.Store
 
    public ResourceKey getPrimaryKey()
    {
-      return this.pk;
+      return new ResourceKey(fnr, resourceID);
    }
 
    public int getSortering()
@@ -777,11 +663,21 @@ public class ResourceDom implements no.moller.evp.model.ejb.ResourceData.Store
 
    public java.lang.String getFnr()
    {
-      return pk.fnr;
+      return fnr;
+   }
+
+   public void setFnr(java.lang.String fnr)
+   {
+      this.fnr = fnr;
    }
 
    public int getResourceID()
    {
-      return pk.resourceID;
+      return resourceID;
+   }
+
+   public void setResourceID(int resourceID)
+   {
+      this.resourceID = resourceID;
    }
 }
