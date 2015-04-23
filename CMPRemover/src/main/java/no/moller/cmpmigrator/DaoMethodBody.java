@@ -149,9 +149,9 @@ public class DaoMethodBody {
             .map(p -> "parameters.addValue(\"" + p.getName().toLowerCase() + "\", key." + p.getName() + ");\n")
             .collect(Collectors.joining());
 
-        // TODO: Parametiser navnene på nøkkel, felt og klasse!
+        // TODO: Parameteriser navnene på nøkkel, felt og klasse!
         return "String whereSQL = \" "
-                + " T1 WHERE "
+                + " WHERE "
                 + namedKeyQuery(key) + "\";\n"
                 + "final MapSqlParameterSource parameters = new MapSqlParameterSource();"
                 + parametersAdding
