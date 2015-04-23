@@ -72,17 +72,17 @@ public class DaoGenerator {
         purifyInterfaceRemoveEjbLegacy(interfaceName);
 
         modifyInterface(className);
+        prettyReturnTypes(this.homeInterface, className);
 
         generateImplementationClass(className, interfaceName);
 
-        prettyReturnTypes(this.homeInterface, className);
         prettyReturnTypes(this.impl, className);
     }
 
     /** Removes the package-path from the return-type, the type must be imported in stead. */
     private void prettyReturnTypes(MethodHolderSource<?> source, String className) {
         homeInterface.getMethods().stream().filter(p -> p.getName().startsWith("find"))
-                    .filter(p -> p.getReturnType().isType(Enumeration.class))
+                    .filter(p -> p.getReturnType().isType("Enumeration"))
                     .forEach(p -> p.setReturnType("Enumeration<" + className + "Dom" + ">"));
     }
 
@@ -153,6 +153,8 @@ public class DaoGenerator {
         impl.addMethod("public boolean create(" + className + "Bean " + className.toLowerCase() + ") {}")
                 .setBody(DaoMethodBody.makeCreateAll(className, ejbjarDocAsString, key))
                 .addThrows(java.sql.SQLException.class);
+
+        impl.addMethod("public void setSimpleInsert(SimpleJdbcInsert sji) { simpleInsert = sji; }");
     }
 
     private void addFields(final String className, String ejbjarDocAsString) {
