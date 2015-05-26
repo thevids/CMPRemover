@@ -33,8 +33,28 @@ public final class RoasterRunner {
      * @throws IOException We throw these raw, so you know things have gone wrong
      */
     public static void main(final String[] args) throws SAXException, IOException {
+        File dir = new File(FILE_PATH_TO_OLD_CODE);
+
+        File[] listFiles = dir.listFiles(f -> f.getName().endsWith("Home.java")
+                                              && !f.getName().endsWith("LocalHome.java")
+                                              /* && f.getName().startsWith("Etr")*/ );
+        int x = 0;
+        for (File file : listFiles) {
+            System.out.println(++x + ": " + file.getName());
+            String classToGenerateFor = file.getName().substring(0, file.getName().indexOf("Home.java"));
+            generate(classToGenerateFor);
+        }
+
 //        String classToGenerateFor = "Appointment";
-        String classToGenerateFor = "Resource";
+//        String classToGenerateFor = "Resource";
+//        String classToGenerateFor = "EtrReportAdditional";
+//        String classToGenerateFor = "Appointmentchanged";
+//        generate(classToGenerateFor);
+    }
+
+    private static void generate(String classToGenerateFor)
+            throws IOException, SAXException {
+        System.out.println("Start: " + classToGenerateFor);
 
         final DaoGenerator dgen = new DaoGenerator(FILE_PATH_TO_OLD_CODE,
                                              NEW_PACKAGE,
@@ -53,6 +73,7 @@ public final class RoasterRunner {
 
         writeToFiles(rmGen.getDomainObj());
         writeToFiles(rmGen.getRowMapper());
+        System.out.println("Done: " + classToGenerateFor);
     }
 
     private static void writeToFiles(final Named source)

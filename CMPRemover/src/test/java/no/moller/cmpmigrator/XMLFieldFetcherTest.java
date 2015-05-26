@@ -35,6 +35,21 @@ public class XMLFieldFetcherTest {
 	}
 
     @Test
+    public void testWhereEJB2() throws SAXException, IOException {
+        String ret = XMLFieldFetcher.retrieveWhereForEJB2(ejbjarDocAsString, "EtrReportAdditional", "findReportAdditional");
+        assertEquals("select object(o) from EtrReportAdditional o where  o.country = ?1 and  o.dealer = ?2", ret);
+    }
+
+    @Test
+    public void testIsCMP2() throws SAXException, IOException {
+        boolean retTrue = XMLFieldFetcher.isCMP2(ejbjarDocAsString, "EtrReportAdditional");
+        assertEquals(true, retTrue);
+
+        boolean retFalse = XMLFieldFetcher.isCMP2(ejbjarDocAsString, "Appointmentchanged");
+        assertEquals(false, retFalse);
+    }
+
+    @Test
     public void testFields() throws SAXException, IOException {
         Collection<String> ret = XMLFieldFetcher.retrieveFields(ejbjarDocAsString, "Appointmentchanged");
 

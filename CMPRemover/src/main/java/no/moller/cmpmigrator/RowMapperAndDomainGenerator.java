@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import org.apache.commons.io.IOUtils;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
+import org.jboss.forge.roaster.model.source.MethodSource;
 import org.xml.sax.SAXException;
 
 public class RowMapperAndDomainGenerator {
@@ -22,6 +23,7 @@ public class RowMapperAndDomainGenerator {
     private JavaClassSource bean;
     private JavaClassSource mapper;
     private JavaClassSource key;
+    private boolean isCMP2;
 
     /** Constructor that also does the job of generating the code. Fetch the generated code
      *  by calling the getters. Throws any exception, we want to fail fast as the end-user
@@ -63,6 +65,7 @@ public class RowMapperAndDomainGenerator {
 
         // Read existing bean, and make domain-object out of it
         bean = Roaster.parse(JavaClassSource.class, classAsString);
+        isCMP2 = bean.isAbstract();
         purifyDomainObjRemoveEjbLegacy(domObjName);
         improveDomainObject(className);
         bean.setName(domObjName);
@@ -71,7 +74,27 @@ public class RowMapperAndDomainGenerator {
     }
 
     private void improveDomainObject(final String className) {
+        // if abstract, then cmp 2.x, which do not have fields in class
+        if(isCMP2) {
+            bean.getMethods().stream()
+                             .filter(method -> method.getName().startsWith("get"))
+                             .forEach(m -> bean.addField()
+                                               .setType( m.getReturnType().getName() )
+                                               .setName(extractFieldname(m))
+                                               .setPublic()
+                                               );
+            bean.setAbstract(false);
+            bean.getMethods().stream()
+                             .filter(m -> m.isAbstract())
+                             .forEach(m -> bean.removeMethod(m));
+        }
         DomainObjMethodBody.makePrimaryKeyFieldGettersAndSetters(key, bean);
+    }
+
+    private String extractFieldname(MethodSource<JavaClassSource> m) {
+        final String restWord = m.getName().substring(4);
+        final String firstLetter = m.getName().substring(3, 4);
+        return firstLetter.toLowerCase() + restWord;
     }
 
     private void purifyDomainObjRemoveEjbLegacy(final String domName) {
@@ -115,8 +138,12 @@ public class RowMapperAndDomainGenerator {
     private void implementMapperMethod(final String className, String ejbjarDocAsString, String domObjName)
             throws SAXException, IOException {
 
+        final String classAsString = IOUtils.toString(new File(filePathToOldCode + className + "Bean.java").toURI(),
+                Charset.forName("ISO-8859-1"));
+        JavaClassSource orginalBean = Roaster.parse(JavaClassSource.class, classAsString);
+
         mapper.addMethod("public " + domObjName + " mapRow(final ResultSet rs, final int rowNum) {}")
-                .setBody(RowMapperMethodBody.makeMapRow(className, ejbjarDocAsString, bean, key))
+                .setBody(RowMapperMethodBody.makeMapRow(className, ejbjarDocAsString, orginalBean, key, isCMP2))
                 .addThrows(java.sql.SQLException.class);
     }
 

@@ -38,4 +38,36 @@ public class XMLFieldFetcher {
                                    .find("field-name")
                                    .contents();
     }
+
+    /**
+     * For EJB2, parse the ejb-jar.xml for where-statements.
+     *
+     * @param ejbJarDocAsString ejb-jar.xml in a string
+     * @param className The entity classname
+     * @param methName Findermethod
+     * @return where-statement
+     * @throws SAXException
+     * @throws IOException
+     */
+    public static String retrieveWhereForEJB2(String ejbJarDocAsString,
+            final String className,
+            final String methName) throws SAXException, IOException {
+        return $(ejbJarDocAsString).find("entity")
+                                   .filter(ctx -> $(ctx).attr("id").equals(className))
+                                   .find("query")
+                                   .filter(ctx -> $(ctx).child("query-method").child("method-name").content().equalsIgnoreCase(methName) )
+                                   .child("ejb-ql")
+                                   .content();
+    }
+
+    public static boolean isCMP2(String ejbJarDocAsString, String className) {
+        String ver = $(ejbJarDocAsString).find("entity")
+                .filter(ctx -> $(ctx).attr("id").equals(className))
+                .child("cmp-version")
+                .content();
+
+        if (ver == null) { return false; }
+
+        return ver.startsWith("2.");
+    }
 }

@@ -53,4 +53,9 @@ public interface ResourceDao
    public Enumeration<ResourceDom> findAllResources();
 
    int remove(ResourceKey pk);
+
+   /**
+    * Insert all fields from domain object.
+    */
+   public int create(ResourceDom resource) throws SQLException;
 }

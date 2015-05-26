@@ -22,11 +22,13 @@ public class RowMapperMethodBody {
     /** Makes a getter-call out of a fieldname. */
     static String settify(String field, String className) {
         String set = "set" + enlargeFirsLetter(field);
-        return className.toLowerCase() + "." + set;
+        return className + "." + set;
     }
 
 
-    public static String makeMapRow(String className, String ejbjarDocAsString, JavaClassSource bean, JavaClassSource key) {
+    public static String makeMapRow(String className, String ejbjarDocAsString, JavaClassSource bean,
+                                    JavaClassSource key, boolean isCMP2) {
+
         Collection<String> fields = XMLFieldFetcher.retrieveFields(ejbjarDocAsString, className);
 
         final String dom = className + "Dom";
@@ -34,24 +36,38 @@ public class RowMapperMethodBody {
         final String pk = className + "Key";
 
         StringBuilder str = new StringBuilder();
-        str.append(data + " data = new " + data + "();\n");
+        str.append(dom + " domObject = new " + dom + "();\n");
 
         // Primary-key-fields will be retrieved into a PrimaryKey object
         str.append("final " + pk + " pk = new " + pk)
            .append("(")
            .append(key.getFields().stream()
                                    .filter(f -> !f.getName().equalsIgnoreCase("serialVersionUid"))
-                                   .map((f -> fieldRetriverPK(f, key)) )
+                                   .map(f -> fieldRetriverPK(f, key) )
                                    .collect(Collectors.joining(", ")) )
            .append(");\n");
 
-        str.append("data.setPrimaryKey(pk);\n");
+        String objToSet = isCMP2 ? "domObject" : "data";
+
+        if(!isCMP2) {
+            str.append(data + " data = new " + data + "();\n");
+            str.append("data.setPrimaryKey(pk);\n");
+        }
 
         fields.stream()
-            .forEach(p -> str.append(settify(p,  "data") + "(" + fieldRetriver(p, bean) + ");\n"));
+            .filter(f -> key.getField(f) == null) // Don't fetch keys here
+            .forEach(p -> str.append(settify(p,  objToSet) + "(" + fieldRetriver(p, bean) + ");\n"));
 
-        str.append(dom + " domOjbect = new " + dom + "(pk);\n")
-           .append("data.copyTo(domOjbect);\nreturn domOjbect;");
+        if(!isCMP2) { str.append("data.copyTo(domObject);"); }
+
+        key.getFields().stream()
+                   .filter( f -> !f.getName().equalsIgnoreCase("serialVersionUid") )
+                   .forEach( f ->
+                       str.append(
+                               "domObject." + "set" + enlargeFirsLetter(f.getName()) + "(" + "pk." + f.getName() + ");"
+                       ) );
+
+        str.append("\nreturn domObject;");
 
         return str.toString();
     }
@@ -60,20 +76,34 @@ public class RowMapperMethodBody {
     /** Making a resultset retrieve-command for the correct type of field. */
     private static String fieldRetriver(String field, JavaClassSource bean) {
         String get = "get" + enlargeFirsLetter(field);
+        String is = "is" + enlargeFirsLetter(field);
+
+        String getMethod;
+
         if(bean.hasMethodSignature(get)) {
-            boolean doTrim = false;
-            Type<JavaClassSource> returnType = bean.getMethod(get).getReturnType();
-            if(returnType.isType(String.class)) {
-                doTrim = true; // Strings need trimming
-            }
-            String retType = returnType.getName();
-            return "rs.get" +
-                    removePath(retType) + "(" +
-                    (doTrim ? "trim(": "") + "\"" +
-                    field.toUpperCase() +"\")" +
-                    (doTrim ? ")": "");
+            getMethod = get;
+        } else if(bean.hasMethodSignature(is)) {
+            getMethod = is;
+        } else {
+            return null;
         }
-        return null;
+
+        return makeFieldRetrieverString(field, bean, getMethod);
+    }
+
+    private static String makeFieldRetrieverString(String field, JavaClassSource bean,
+            String getMethod) {
+        boolean doTrim = false;
+        Type<JavaClassSource> returnType = bean.getMethod(getMethod).getReturnType();
+        if(returnType.isType(String.class)) {
+            doTrim = true; // Strings need trimming
+        }
+        String retType = returnType.getName();
+        return "rs.get" +
+                removePath(retType) + "(" +
+                (doTrim ? "trim(": "") + "\"" +
+                              field.toUpperCase() +"\")" + (doTrim ? ")"
+                           : "");
     }
 
     /** Making a resultset retrieve-command for the correct type of field. */

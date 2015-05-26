@@ -785,6 +785,54 @@
          	<cmp-field id="CMPAttribute_1327041168380">
          		<field-name>departmentCodeToolCompensation</field-name>
          	</cmp-field>
+         	<cmp-field id="CMPAttribute_1425466399296">
+         		<field-name>departmentCodeOvertime1</field-name>
+         	</cmp-field>
+         	<cmp-field id="CMPAttribute_1425466399312">
+         		<field-name>departmentCodeOBtime1700</field-name>
+         	</cmp-field>
+         	<cmp-field id="CMPAttribute_1425467111786">
+         		<field-name>salaryCodeOvertime1</field-name>
+         	</cmp-field>
+         	<cmp-field id="CMPAttribute_1425467111793">
+         		<field-name>salaryCodeOvertime2</field-name>
+         	</cmp-field>
+         	<cmp-field id="CMPAttribute_1425467111799">
+         		<field-name>salaryCodeOvertime3</field-name>
+         	</cmp-field>
+         	<cmp-field id="CMPAttribute_1425467111805">
+         		<field-name>salaryCodeOvertime4</field-name>
+         	</cmp-field>
+         	<cmp-field id="CMPAttribute_1425467111811">
+         		<field-name>salaryCodeOBtime1700</field-name>
+         	</cmp-field>
+         	<cmp-field id="CMPAttribute_1425467111816">
+         		<field-name>salaryCodeOBtime2230</field-name>
+         	</cmp-field>
+         	<cmp-field id="CMPAttribute_1425467111822">
+         		<field-name>salaryCodeOBtime0630</field-name>
+         	</cmp-field>
+         	<cmp-field id="CMPAttribute_1425467111828">
+         		<field-name>salaryCodeOBtimeWeekend</field-name>
+         	</cmp-field>
+         	<cmp-field id="CMPAttribute_1425505127162">
+         		<field-name>departmentCodeOvertime2</field-name>
+         	</cmp-field>
+         	<cmp-field id="CMPAttribute_1425505127169">
+         		<field-name>departmentCodeOvertime3</field-name>
+         	</cmp-field>
+         	<cmp-field id="CMPAttribute_1425505127174">
+         		<field-name>departmentCodeOvertime4</field-name>
+         	</cmp-field>
+         	<cmp-field id="CMPAttribute_1425505127180">
+         		<field-name>departmentCodeOBtime2230</field-name>
+         	</cmp-field>
+         	<cmp-field id="CMPAttribute_1425505127185">
+         		<field-name>departmentCodeOBtime0630</field-name>
+         	</cmp-field>
+         	<cmp-field id="CMPAttribute_1425505127190">
+         		<field-name>departmentCodeOBtimeWeekend</field-name>
+         	</cmp-field>
          	<query>
          		<description></description>
          		<query-method>

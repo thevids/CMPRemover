@@ -139,8 +139,8 @@ public class ResourceDaoImpl implements ResourceDao
    {
       String whereSQL = "  WHERE  T1.FNR = :fnr  AND  T1.RESOURCEID = :resourceid ";
       final MapSqlParameterSource parameters = new MapSqlParameterSource();
-      parameters.addValue("fnr", key.fnr);
-      parameters.addValue("resourceid", key.resourceID);
+      parameters.addValue("fnr", primaryKey.fnr);
+      parameters.addValue("resourceid", primaryKey.resourceID);
       return SafeReturn.ret(
             mwinNamedTemplate.query(SELECT + whereSQL, parameters, mapper),
             ResourceDom.class);
@@ -157,7 +157,13 @@ public class ResourceDaoImpl implements ResourceDao
 
    public ResourceDom findResource(String argFnr, int argResourceID)
    {
-      throw new java.lang.UnsupportedOperationException("Not yet implemented");
+      String whereSQL = " WHERE T1.FNR = :argfnr AND T1.RESOURCEID = :argresourceid";
+      final MapSqlParameterSource parameters = new MapSqlParameterSource();
+      parameters.addValue("argfnr", argFnr);
+      parameters.addValue("argresourceid", argResourceID);
+      return SafeReturn.ret(
+            mwinNamedTemplate.query(SELECT + whereSQL, parameters, mapper),
+            ResourceDom.class);
    }
 
    public ResourceDom findResourceByMekID(java.lang.String argFnr,
@@ -174,24 +180,48 @@ public class ResourceDaoImpl implements ResourceDao
 
    public Enumeration<ResourceDom> findResources(java.lang.String argFnr)
    {
+      String whereSQL = " WHERE T1.FNR = :argfnr";
+      final MapSqlParameterSource parameters = new MapSqlParameterSource();
+      parameters.addValue("argfnr", argFnr);
+      return SafeReturn.ret(
+            mwinNamedTemplate.query(SELECT + whereSQL, parameters, mapper),
+            Enumeration.class);
    }
 
    public Enumeration<ResourceDom> findResourcesByShiftPlan(String argFnr,
          int argPlanID)
    {
-      throw new java.lang.UnsupportedOperationException("Not yet implemented");
+      String whereSQL = " WHERE T1.FNR = :argfnr AND T1.PLANID = :argplanid";
+      final MapSqlParameterSource parameters = new MapSqlParameterSource();
+      parameters.addValue("argfnr", argFnr);
+      parameters.addValue("argplanid", argPlanID);
+      return SafeReturn.ret(
+            mwinNamedTemplate.query(SELECT + whereSQL, parameters, mapper),
+            Enumeration.class);
    }
 
    public Enumeration<ResourceDom> findResourcesBySkills(String argFnr,
          String argSkills)
    {
-      throw new java.lang.UnsupportedOperationException("Not yet implemented");
+      String whereSQL = " WHERE T1.FNR = :argfnr AND T1.SKILLTYPES LIKE '%:argskills%'";
+      final MapSqlParameterSource parameters = new MapSqlParameterSource();
+      parameters.addValue("argfnr", argFnr);
+      parameters.addValue("argskills", argSkills);
+      return SafeReturn.ret(
+            mwinNamedTemplate.query(SELECT + whereSQL, parameters, mapper),
+            Enumeration.class);
    }
 
    public Enumeration<ResourceDom> findResourcesInGroup(String argFnr,
          int argResourceGroupRef)
    {
-      throw new java.lang.UnsupportedOperationException("Not yet implemented");
+      String whereSQL = " WHERE T1.FNR = :argfnr AND T1.RESOURCEGROUPREF = :argresourcegroupref";
+      final MapSqlParameterSource parameters = new MapSqlParameterSource();
+      parameters.addValue("argfnr", argFnr);
+      parameters.addValue("argresourcegroupref", argResourceGroupRef);
+      return SafeReturn.ret(
+            mwinNamedTemplate.query(SELECT + whereSQL, parameters, mapper),
+            Enumeration.class);
    }
 
    public ResourceDom create(String argFnr, String argName, int argType,
@@ -242,7 +272,22 @@ public class ResourceDaoImpl implements ResourceDao
       return mwinNamedTemplate.update(sql, parameters);
    }
 
-   public boolean create(ResourceBean resource) throws SQLException
+   /**
+    * Insert all fields from domain object.
+    */
+   public int create(ResourceDom resource) throws SQLException
+   {
+      Map<String, Object> parameters = new HashMap<String, Object>();
+      parameters.put("RESOURCE", resource);
+      int nr = simpleInsert.execute(parameters);
+      if (nr == 0)
+      {
+         throw new SQLException("Failure to insert " + resource);
+      }
+      return null;
+   }
+
+   public int create(ResourceDom resource) throws SQLException
    {
       Map<String, Object> parameters = new HashMap<String, Object>();
       parameters.put("DATECREATED", resource.getDateCreated());
@@ -281,7 +326,7 @@ public class ResourceDaoImpl implements ResourceDao
       {
          throw new SQLException("Failure to insert " + resource);
       }
-      return true;
+      return nr;
    }
 
    public void setSimpleInsert(SimpleJdbcInsert sji)

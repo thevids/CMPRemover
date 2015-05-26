@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 
 import org.jboss.forge.roaster.model.source.FieldSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
+import org.jboss.forge.roaster.model.source.MethodSource;
 
 public class DomainObjMethodBody {
 
@@ -15,7 +16,7 @@ public class DomainObjMethodBody {
      */
     static void makePrimaryKeyFieldGettersAndSetters(JavaClassSource key, JavaClassSource bean) {
 
-        bean.getMethod("getPrimaryKey").setBody("return new " + key.getName() + "("
+        primaryKeyGetterMethod(key, bean).setBody("return new " + key.getName() + "("
                 + getKeyFieldStream(key).map(k -> k.getName())
                            .collect(Collectors.joining(","))
                 +");").setReturnType(key.getName());
@@ -24,6 +25,15 @@ public class DomainObjMethodBody {
             addSetterAndGetter(bean, f);
             }
         );
+    }
+
+    private static MethodSource<JavaClassSource> primaryKeyGetterMethod(JavaClassSource key, JavaClassSource bean) {
+        MethodSource<JavaClassSource> method = bean.getMethod("getPrimaryKey");
+        if(method ==null) {
+            method = bean.addMethod().setName("getPrimaryKey").setPublic().setReturnType(key.getClass());
+        }
+
+        return method;
     }
 
     private static void addSetterAndGetter(JavaClassSource bean, FieldSource<JavaClassSource> f) {

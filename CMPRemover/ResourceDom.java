@@ -71,7 +71,6 @@ public class ResourceDom implements no.moller.evp.model.ejb.ResourceData.Store
     * Implementation field for persistent attribute: toolCompensation
     */
    public boolean toolCompensation;
-   private final ResourceKey pk;
 
    public java.lang.String getAvailableFrom()
    {
@@ -654,11 +653,6 @@ public class ResourceDom implements no.moller.evp.model.ejb.ResourceData.Store
    public void setToolCompensation(boolean newToolCompensation)
    {
       toolCompensation = newToolCompensation;
-   }
-
-   public ResourceDom(ResourceKey pk)
-   {
-      this.pk = pk;
    }
 
    public java.lang.String getFnr()

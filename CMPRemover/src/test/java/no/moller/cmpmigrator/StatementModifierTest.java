@@ -47,5 +47,13 @@ public class StatementModifierTest {
 
         assertEquals("public final static String SELECT = \"select DateNew, AppointmentID, fnr, DateOld from MWIN.TestClass T1 \"", ret);
     }
+
+    @Test
+    public void testNormalizeEJBQL() {
+        String normalizeEJBQL =
+                StatementModifier.normalizeEJBQL(
+                        "select object(o) from EtrReportAdditional o where  o.country = ?1 and  o.dealer = ?2");
+        assertEquals("where  T1.country = ? and  T1.dealer = ?", normalizeEJBQL);
+    }
 }
 

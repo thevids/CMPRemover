@@ -9,7 +9,9 @@ import java.util.stream.Collectors;
 
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaInterfaceSource;
+import org.jboss.forge.roaster.model.source.JavaSource;
 import org.jboss.forge.roaster.model.source.MethodSource;
+import org.jboss.forge.roaster.model.source.ParameterSource;
 import org.xml.sax.SAXException;
 
 public class DaoMethodBody {
@@ -19,21 +21,22 @@ public class DaoMethodBody {
             + "/* TODO: Empty method, needs to be written by hand.*/ \n";
 
     public static String makeMethodBodyFinder(final String className,
-            String docAsString, MethodSource<JavaInterfaceSource> met)
+            String docAsString, MethodSource<JavaInterfaceSource> met, String ejbjarDocAsString)
             throws SAXException, IOException {
 
-        // Put parameters in a string equal to that in the xmi-file
-        String paramsAsString = met.getParameters().stream()
-                                   .map(p -> p.getType().toString()) // java-type of param
-                                   .collect(Collectors.joining(" ")); // joined seperated by a space
+        String whereStatement;
 
-        // Find where-statement in xmi-file
-        String whereStatement = XMLFieldFetcher.retrieveWhereStatement(docAsString,
-                                    className, met.getName(), paramsAsString.trim());
+        if(XMLFieldFetcher.isCMP2(ejbjarDocAsString, className)) {
+            whereStatement = retrieveWhereCMP2(ejbjarDocAsString, className, met.getName());
+        } else {
+            whereStatement = retrieveWhereCMP1(className, docAsString, met);
+        }
 
-        if(whereStatement == null || whereStatement.trim().isEmpty()) {
+        if(whereStatement == null) {
             return THROW_UNSUPPORTED;
         }
+
+        boolean hasWhere = !whereStatement.trim().isEmpty();
 
         // We like to use named parameters (not the anonym '?' that is default
         String namedParamWhereStatement =
@@ -41,21 +44,57 @@ public class DaoMethodBody {
 
         final StringBuilder str = new StringBuilder();
 
-        str.append("String whereSQL = \" WHERE " + namedParamWhereStatement + "\";\n\n")
-           .append("final MapSqlParameterSource parameters = new MapSqlParameterSource();\n");
+        if (hasWhere) {
+            str.append("String whereSQL = \" WHERE " + namedParamWhereStatement + "\";\n\n");
+        }
+        str.append("final MapSqlParameterSource parameters = new MapSqlParameterSource();\n");
 
         // Method parameters are to be mapped into sql
         met.getParameters().stream().map(p -> p.getName())
                             .forEach(p -> str.append("parameters.addValue(\"" + p.toLowerCase() + "\", " + p + ");\n"));
 
         str.append("\nreturn SafeReturn.ret("
-                + "mwinNamedTemplate.query(SELECT + whereSQL, parameters, mapper)"
-                + ", " + met.getReturnType() +".class)"
+                + "mwinNamedTemplate.query(SELECT "
+                + (hasWhere ? " + whereSQL": "" )
+                + ", parameters, mapper)"
+                + ", " + met.getReturnType().getName() +".class)"
                 + ";\n");
 
         return str.toString();
     }
 
+
+    private static String retrieveWhereCMP1(final String className, String docAsString,
+            MethodSource<JavaInterfaceSource> met) throws SAXException,
+            IOException {
+        String whereStatement;
+        // Put parameters in a string equal to that in the xmi-file
+        String paramsAsString = met.getParameters().stream()
+                .map(p -> p.getType().getQualifiedName()) // java-type of param
+                .collect(Collectors.joining(" ")); // joined seperated by a space
+
+        // Find where-statement in xmi-file
+        whereStatement = XMLFieldFetcher.retrieveWhereStatement(docAsString,
+                className, met.getName(), paramsAsString.trim());
+        return whereStatement;
+    }
+
+    private static String retrieveWhereCMP2(String docAsString, String className, String metName)
+            throws SAXException, IOException {
+        // Find where-statement in xmi-file
+        String whereStatement = XMLFieldFetcher.retrieveWhereForEJB2(docAsString,
+                className, metName);
+        if (whereStatement == null) {
+            return null;
+        }
+
+        // Some do not have a where-statement, return empty
+        if(whereStatement.indexOf("where") < 0) {
+            return "";
+        }
+
+        return StatementModifier.normalizeEJBQL(whereStatement);
+    }
 
     public static String makeMethodBodyCreate(String className, String docAsString,
             MethodSource<JavaInterfaceSource> met) {
@@ -70,7 +109,6 @@ public class DaoMethodBody {
         String insertException = "throw new SQLException(\"Failure to insert \" + "
                 + met.getParameters().stream().map( p -> p.getName() ).collect(Collectors.joining(" + ")) + ");";
 
-        System.err.println(insertException);
         str.append("\nint nr = simpleInsert.execute(parameters);\n")
            .append("if (nr==0) { ").append(insertException).append("}")
            .append("return null;\n"); // We will just smoke out who uses this reference, its detached data now
@@ -109,12 +147,10 @@ public class DaoMethodBody {
         String insertException = "throw new SQLException(\"Failure to insert \" + "
                 + className.toLowerCase().toString() + ");";
 
-        System.err.println(insertException);
         str.append("\nint nr = simpleInsert.execute(parameters);\n")
            .append("if (nr==0) { ").append(insertException).append("}")
-           .append("\nreturn true;");
+           .append("\nreturn nr;");
 
-        System.err.println(str.toString());
         return str.toString();
     }
 
@@ -146,7 +182,7 @@ public class DaoMethodBody {
         // Method parameters are to be mapped into db, simplejdbcinsert takes a hash-map
         String parametersAdding = key.getFields().stream()
             .filter(p -> !p.getName().equalsIgnoreCase("serialVersionUID"))
-            .map(p -> "parameters.addValue(\"" + p.getName().toLowerCase() + "\", key." + p.getName() + ");\n")
+            .map(p -> "parameters.addValue(\"" + p.getName().toLowerCase() + "\", primaryKey." + p.getName() + ");\n")
             .collect(Collectors.joining());
 
         // TODO: Parameteriser navnene på nøkkel, felt og klasse!

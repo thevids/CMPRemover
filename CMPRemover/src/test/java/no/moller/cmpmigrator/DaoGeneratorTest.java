@@ -26,9 +26,6 @@ public class DaoGeneratorTest {
                 FILE_PATH_TO_OLD_XMI,
                 "Appointment");
 
-//        System.out.println(dgen.getNewDaoInterface());
-        System.out.println(dgen.getDaoImpl());
-
         assertFalse(dgen.getDaoInterface().hasInterface("javax.ejb.EJBHome"));
 
         JavaClassSource impl = dgen.getDaoImpl();
@@ -37,11 +34,13 @@ public class DaoGeneratorTest {
 			if(met.getName().startsWith("find")) {
 
 				assertNotNull(met.getBody());
-				assertTrue("Body should contain a where-statement", met.getBody().indexOf("whereSQL") > -1);
+				assertTrue("Body should contain a where-statement " + met.getName(), met.getBody().indexOf("whereSQL") > -1);
 			} else if(met.getName().startsWith("create")) {
 			    assertTrue("Body of create should contain an execute-call", met.getBody().indexOf("execute(") > -1);
             } else if(met.getName().startsWith("remove")) {
                 assertTrue("Body of remove should contain an update-call", met.getBody().indexOf("update(") > -1);
+			} else if (met.getName().startsWith("set")) {
+			    assertTrue("Body should not be empty", met.getBody().length()>0);
 			} else {
 				assertTrue("Shold have UnsupportedOperationException if no where-statement: " + met.getName(),
 						met.getBody().contains("UnsupportedOperationException"));

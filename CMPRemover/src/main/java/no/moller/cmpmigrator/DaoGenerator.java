@@ -98,7 +98,15 @@ public class DaoGenerator {
                      .setReturnType("int")
                      .setParameters(className + "Key pk");
 
+        homeInterface.addMethod(createAllSignature(className) +";")
+                     .addThrows(java.sql.SQLException.class)
+                     .getJavaDoc().setText("Insert all fields from domain object.");
+
         homeInterface.addImport(Enumeration.class);
+    }
+
+    private String createAllSignature(final String className) {
+        return "public int create(" + className + "Dom " + className.toLowerCase() + ")";
     }
 
     private void purifyInterfaceRemoveEjbLegacy(final String interfaceName) {
@@ -145,12 +153,12 @@ public class DaoGenerator {
         for(MethodSource<JavaInterfaceSource> met: homeInterface.getMethods()) {
             impl.addMethod(met.toString())
                 .setPublic() // Methods from interface are public
-                .setBody (makeMethodBody(className, docAsString, met));
+                .setBody (makeMethodBody(className, docAsString, met, ejbjarDocAsString));
                 //.addAnnotation("@SuppressWarnings(\"unchecked\")");
         }
 
         // Make an easier insert-method for all fields via domain-obj
-        impl.addMethod("public boolean create(" + className + "Bean " + className.toLowerCase() + ") {}")
+        impl.addMethod(createAllSignature(className) + " {}")
                 .setBody(DaoMethodBody.makeCreateAll(className, ejbjarDocAsString, key))
                 .addThrows(java.sql.SQLException.class);
 
@@ -183,7 +191,7 @@ public class DaoGenerator {
     }
 
     private String makeMethodBody(final String className, String docAsString,
-            MethodSource<JavaInterfaceSource> met) throws SAXException, IOException {
+            MethodSource<JavaInterfaceSource> met, String ejbjarDocAsString) throws SAXException, IOException {
 
         if(met.getName().startsWith("create")) {
             return DaoMethodBody.makeMethodBodyCreate(className, docAsString, met);
@@ -193,7 +201,7 @@ public class DaoGenerator {
             return DaoMethodBody.makeFindByPK(className, key);
         }
 
-        return DaoMethodBody.makeMethodBodyFinder(className, docAsString, met);
+        return DaoMethodBody.makeMethodBodyFinder(className, docAsString, met, ejbjarDocAsString);
     }
 
 

@@ -50,4 +50,11 @@ public class StatementModifier {
                     + fieldNamesCommaSeperated
                     + " from " + SCHEAMNAME + className + " T1 \"";
     }
+
+    public static String normalizeEJBQL(String whereStatement) {
+        System.out.println(whereStatement);
+        return whereStatement.substring(whereStatement.indexOf("where"))
+                                                      .replaceAll("\\?\\d", "\\?")
+                                                      .replaceAll("o\\.", "T1\\.");
+    }
 }
