@@ -154,6 +154,32 @@ public class DaoMethodBody {
         return str.toString();
     }
 
+    /**
+     * Makes a create method that takes a domain-object and inserts every field.
+     *
+     * @param className Name of the domain class
+     * @param key Primary keys are filtered out
+     * @param ejbjarDocAsString ejb-jar.xml in a string
+     * @param key Primary Key
+     * @return body of create method
+     */
+    public static String makeChangedFieldMap(String className, JavaClassSource key, String ejbjarDocAsString) {
+        Collection<String> fields = XMLFieldFetcher.retrieveFields(ejbjarDocAsString, key.getName().replace("Key", ""));
+
+        StringBuilder str = new StringBuilder();
+        str.append("Map<String,Object> parameters = new HashMap<String,Object>();\n");
+
+        // Method parameters are to be mapped into db, jdbctemplate takes a hash-map
+        fields.stream()
+            .filter(p -> key.getField(p) == null ) // Primary Key will not be in map, obviously
+            .forEach(p -> {
+                str.append("if (this.is" + p + "Dirty)");
+                str.append("parameters.put(\"" + fieldnameify(p) + "\", " + FieldNameTool.gettify(p, "this") + ");\n");
+            });
+
+        str.append("return parameters;");
+        return str.toString();
+    }
 
     public static String makeRemoveMethod(String className, JavaClassSource key) {
         // Method parameters are to be mapped into db, simplejdbcinsert takes a hash-map
@@ -170,6 +196,26 @@ public class DaoMethodBody {
                 + "return mwinNamedTemplate.update(sql, parameters);";
     }
 
+    public static String makeUpdateAllChangedFieldsMethod(String className, JavaClassSource key) {
+        // Method parameters are to be mapped into db, simplejdbcinsert takes a hash-map
+        String parametersAdding = key.getFields().stream()
+            .filter(p -> !p.getName().equalsIgnoreCase("serialVersionUID"))
+            .map(p -> "parameters.put(\"" + p.getName().toLowerCase() + "\", pk." + p.getName() + ");\n")
+            .collect(Collectors.joining());
+
+        return "StringBuffer buf = new StringBuffer();"
+                + "for (String name : parameters.keySet()) { "
+                + " buf.append(\" T1.\").append(name).append(\" =  :\").append(name).append(\",\"); "
+                + "}"
+                + "String updates = buf.toString();"
+                + "String sql = \"UPDATE MWIN." + fieldnameify(className)
+                + " T1 SET \" + "
+                + "updates.substring(0, updates.lastIndexOf(',')) + "
+                + " \" WHERE "
+                + namedKeyQuery(key) + "\"; "
+                + parametersAdding
+                + "mwinNamedTemplate.update(sql, parameters);";
+    }
 
     private static String namedKeyQuery(JavaClassSource key) {
         return key.getFields().stream()
@@ -185,7 +231,6 @@ public class DaoMethodBody {
             .map(p -> "parameters.addValue(\"" + p.getName().toLowerCase() + "\", primaryKey." + p.getName() + ");\n")
             .collect(Collectors.joining());
 
-        // TODO: Parameteriser navnene på nøkkel, felt og klasse!
         return "String whereSQL = \" "
                 + " WHERE "
                 + namedKeyQuery(key) + "\";\n"
