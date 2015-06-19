@@ -35,10 +35,10 @@ public final class DataUpdateGeneratorRunner {
      * @throws IOException We throw these raw, so you know things have gone wrong
      */
     public static void main(final String[] args) throws SAXException, IOException {
-        File dir = new File(FILE_PATH_TO_OLD_DATA_CODE);
+        File dir = new File(FILE_PATH_TO_OLD_CODE);
 
-        File[] listFiles = dir.listFiles(f -> //f.getName().endsWith("Data.java") &&
-                                              f.getName().startsWith("ETR") );
+        File[] listFiles = dir.listFiles(f -> f.getName().endsWith("Data.java") &&
+                                              f.getName().startsWith("Etr") );
         int x = 0;
 
         for (File file : listFiles) {
@@ -63,6 +63,12 @@ public final class DataUpdateGeneratorRunner {
                 NEW_PACKAGE,
                 FILE_PATH_TO_OLD_XMI,
                 classToGenerateFor);
+
+        if ( generator.getImpl() == null) {
+            System.out.println("Skipped");
+            return;
+        }
+
         writeToFiles(generator.getImpl());
 
         System.out.println("Done: " + classToGenerateFor);

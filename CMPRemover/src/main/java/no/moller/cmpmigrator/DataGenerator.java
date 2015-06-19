@@ -13,6 +13,7 @@ import org.apache.commons.io.IOUtils;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaInterfaceSource;
+import org.jboss.forge.roaster.model.source.JavaSource;
 import org.jboss.forge.roaster.model.source.MethodHolderSource;
 import org.jboss.forge.roaster.model.source.MethodSource;
 import org.xml.sax.SAXException;
@@ -60,7 +61,7 @@ public class DataGenerator {
      * @throws SAXException
      */
     private void generate(String className) throws IOException, SAXException {
-        final String classAsString = IOUtils.toString(new File(filePathToOldDataCode + className + ".java").toURI(),
+        final String classAsString = IOUtils.toString(new File(filePathToOldCode + className + ".java").toURI(),
                 Charset.forName("ISO-8859-1"));
         String keyAsString;
         try {
@@ -81,26 +82,38 @@ public class DataGenerator {
                     keyAsString = IOUtils.toString(new File(pathname).toURI(),
                             Charset.forName("ISO-8859-1"));
                 } catch (java.io.FileNotFoundException exx) {
-                        String pathname = filePathToOldCode + className.replace("ETR", "Etr").replace("Data", "") + "Key.java";
+                        String pathname = filePathToOldCode + className.replace("ETR", "Etr").replaceFirst("Data", "") + "Key.java";
                         System.out.println(pathname);
                         keyAsString = IOUtils.toString(new File(pathname).toURI(),
                                 Charset.forName("ISO-8859-1"));
                 }
             }
         }
-        key = Roaster.parse(JavaClassSource.class, keyAsString);
 
+        if (Roaster.parse(JavaSource.class, classAsString).isInterface()) return;
+
+        key = Roaster.parse(JavaClassSource.class, keyAsString);
+        impl = Roaster.parse(JavaClassSource.class, classAsString);
+
+        removeSettersFromStore();
         generateUpdateInfoMethod(className, classAsString);
     }
 
     private void generateUpdateInfoMethod(final String className, String classAsString)
             throws SAXException, IOException {
 
-        impl = Roaster.parse(JavaClassSource.class, classAsString);
-
         addImports();
 
         implementMethods(className);
+    }
+
+    private void removeSettersFromStore() {
+        JavaInterfaceSource store = (JavaInterfaceSource) impl.getNestedType("Store");
+        if (store == null) return;
+
+        store.getMethods().stream()
+             .filter(p -> p.getName().startsWith("set"))
+             .forEach(m -> store.removeMethod(m));
     }
 
     private void implementMethods(final String className) throws SAXException, IOException {
