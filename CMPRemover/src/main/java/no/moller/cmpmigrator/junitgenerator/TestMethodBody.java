@@ -1,6 +1,7 @@
 package no.moller.cmpmigrator.junitgenerator;
 
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import no.moller.cmpmigrator.XMLFieldFetcher;
@@ -27,7 +28,7 @@ public class TestMethodBody {
     }
 
 
-    public static String makeMapRow(String className, String ejbjarDocAsString, JavaClassSource bean,
+    public static String makeDataToDom(String className, String ejbjarDocAsString, JavaClassSource bean,
                                     JavaClassSource key) {
 
         Collection<String> fields = XMLFieldFetcher.retrieveFields(ejbjarDocAsString, className);
@@ -39,7 +40,7 @@ public class TestMethodBody {
         StringBuilder str = new StringBuilder();
         str.append(dom + " dom = new " + dom + "();\n");
 
-        // Primary-key-fields will be retrieved into a PrimaryKey object
+        // Primary-key-fields will be set into a PrimaryKey object
         str.append("final " + pk + " pk = new " + pk)
            .append("(")
            .append(key.getFields().stream()
@@ -53,9 +54,8 @@ public class TestMethodBody {
         str.append(data + " data = new " + data + "();\n");
         //str.append("data.setPrimaryKey(pk);\n");
 
-        fields.stream()
-            .filter(f -> key.getField(f) == null) // Don't fetch keys here
-            .forEach(p -> str.append(settify(p,  objToSet) + "(" + fieldRetriver(p, bean) + ");\n"));
+        // Call setters
+        int countFieldsExceptKeys = callSetters(bean, key, fields, str, objToSet);
 
         str.append("data.copyTo(dom);");
 
@@ -66,22 +66,87 @@ public class TestMethodBody {
                                "dom." + "set" + enlargeFirstLetter(f.getName()) + "(" + "pk." + f.getName() + ");"
                        ) );
 
+        makeAsserts(bean, fields, str, "dom");
+
+        str.append("Map<String, Object> changedFieldsMap = data.getChangedFieldsMap();");
+        str.append("assertEquals(" + countFieldsExceptKeys + ", changedFieldsMap.size());");
+
+        key.getFields().stream()
+        .filter(f -> !f.getName().equalsIgnoreCase("serialVersionUid"))
+        .forEach(f -> str.append("assertTrue(dom.toString().contains(pk." + f.getName() +"));"));
+
+        return str.toString();
+    }
+
+    public static String makeDomToData(String className,
+            String ejbjarDocAsString, JavaClassSource bean, JavaClassSource key) {
+
+        Collection<String> fields = XMLFieldFetcher.retrieveFields(
+                ejbjarDocAsString, className);
+
+        final String dom = className + "Dom";
+        final String data = className + "Data";
+        final String pk = className + "Key";
+
+        StringBuilder str = new StringBuilder();
+        str.append(dom + " dom = new " + dom + "();\n");
+
+        // Primary-key-fields will be set into a PrimaryKey object
+        str.append("final " + pk + " pk = new " + pk)
+                .append("(")
+                .append(key
+                        .getFields()
+                        .stream()
+                        .filter(f -> !f.getName().equalsIgnoreCase(
+                                "serialVersionUid"))
+                        .map(f -> fieldRetriverPK(f, key))
+                        .collect(Collectors.joining(", "))).append(");\n");
+
+        String objToSet = "dom";
+
+        // str.append("data.setPrimaryKey(pk);\n");
+
+        // Call setters
+        callSetters(bean, key, fields, str, objToSet);
+
+
+        str.append(data + " data = new " + data + "(dom);\n");
+        makeAsserts(bean, fields, str, "data");
+
+        str.append("Map<String, Object> changedFieldsMap = data.getChangedFieldsMap();");
+        str.append("assertTrue(changedFieldsMap.isEmpty());");
+
+        return str.toString();
+    }
+
+    private static int callSetters(JavaClassSource bean, JavaClassSource key,
+            Collection<String> fields, StringBuilder str, String objToSet) {
+        AtomicInteger count = new AtomicInteger(0);
+        fields.stream()
+            .filter(f -> key.getField(f) == null) // Don't fetch keys here
+            .forEach(p -> {
+                str.append(settify(p,  objToSet) + "(" + fieldRetriver(p, bean) + ");\n");
+                count.incrementAndGet();
+            });
+        return count.get();
+    }
+
+    private static void makeAsserts(JavaClassSource bean,
+            Collection<String> fields, StringBuilder str, String objToGetFrom) {
         for (String p : fields) {
             Type<JavaClassSource> type = bean.getField(p).getType();
             if (type.getName().equalsIgnoreCase("boolean")) {
-                str.append("assertTrue(" + p.toUpperCase() + " == " + gettify(p, "dom") + ");\n");
+                str.append("assertTrue(" + p.toUpperCase() + " == " + gettify(p, objToGetFrom) + ");\n");
             } else if (type.isPrimitive()){
                 if (type.getName().equalsIgnoreCase("double") || type.getName().equalsIgnoreCase("float")) {
-                    str.append("assertEquals(" + p.toUpperCase() + ", " + gettify(p, "dom") + ",0);\n");
+                    str.append("assertEquals(" + p.toUpperCase() + ", " + gettify(p, objToGetFrom) + ",0);\n");
                 } else {
-                    str.append("assertEquals(" + p.toUpperCase() + ", " + gettify(p, "dom") + ");\n");
+                    str.append("assertEquals(" + p.toUpperCase() + ", " + gettify(p, objToGetFrom) + ");\n");
                 }
             } else {
-                str.append("assertSame(" + p.toUpperCase() + ", " + gettify(p, "dom") + ");\n");
+                str.append("assertSame(" + p.toUpperCase() + ", " + gettify(p, objToGetFrom) + ");\n");
             }
         }
-
-        return str.toString();
     }
 
 

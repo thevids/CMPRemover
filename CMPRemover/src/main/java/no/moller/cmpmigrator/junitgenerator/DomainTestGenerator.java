@@ -65,32 +65,16 @@ public class DomainTestGenerator {
                 Charset.forName("ISO-8859-1"));
         key = Roaster.parse(JavaClassSource.class, keyAsString);
 
-        final String domObjName = className + "TestDom";
+        final String domObjName = className + "Dom";
 
         // Read existing bean, and make domain-object out of it
         dom = Roaster.parse(JavaClassSource.class, classAsString);
         //makeTestForDomainObject(className);
 
-        generateRowMapper(className, domObjName);
+        generateTest(className, domObjName);
     }
 
-    private void makeTestForDomainObject(final String className) {
-        dom.getMethods().stream()
-                         .filter(method -> method.getName().startsWith("get"))
-                         .forEach(m -> dom.addField()
-                                           .setType( m.getReturnType().getName() )
-                                           .setName(extractFieldname(m))
-                                           .setPublic()
-                                           );
-    }
-
-    private String extractFieldname(MethodSource<JavaClassSource> m) {
-        final String restWord = m.getName().substring(4);
-        final String firstLetter = m.getName().substring(3, 4);
-        return firstLetter.toLowerCase() + restWord;
-    }
-
-    private void generateRowMapper(final String className, final String domObjName)
+    private void generateTest(final String className, final String domObjName)
             throws SAXException, IOException {
 
         // Read file, once, into memory for speed
@@ -107,7 +91,7 @@ public class DomainTestGenerator {
 
         makeConstants(className, ejbjarDocAsString, domObjName);
 
-        implementMapperMethod(className, ejbjarDocAsString, domObjName);
+        implementTestMethods(className, ejbjarDocAsString, domObjName);
     }
 
     private void makeConstants(String className, String ejbjarDocAsString,
@@ -140,12 +124,16 @@ public class DomainTestGenerator {
         }
     }
 
-    private void implementMapperMethod(final String className, String ejbjarDocAsString, String domObjName)
+    private void implementTestMethods(final String className, String ejbjarDocAsString, String domObjName)
             throws SAXException, IOException {
 
 
-        test.addMethod("public void mapTest() {}")
-                .setBody(TestMethodBody.makeMapRow(className, ejbjarDocAsString, dom, key))
+        test.addMethod("public void mapToDomTest() {}")
+                .setBody(TestMethodBody.makeDataToDom(className, ejbjarDocAsString, dom, key))
+                .addAnnotation("Test");
+
+        test.addMethod("public void mapToDataTest() {}")
+                .setBody(TestMethodBody.makeDomToData(className, ejbjarDocAsString, dom, key))
                 .addAnnotation("Test");
     }
 
@@ -155,6 +143,8 @@ public class DomainTestGenerator {
         test.addImport("org.junit.Before");
         test.addImport("java.sql.Timestamp");
         test.addImport("org.junit.Assert.*").setStatic(true);
+        test.addImport("java.util.Map");
+        test.addImport("java.util.Date");
     }
 
     public JavaClassSource getDomainObj() {

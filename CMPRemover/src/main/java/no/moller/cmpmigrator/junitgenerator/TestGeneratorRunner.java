@@ -60,7 +60,6 @@ public final class TestGeneratorRunner {
                 FILE_PATH_TO_OLD_XMI,
                 classToGenerateFor);
 
-        writeToFiles(rmGen.getDomainObj());
         writeToFiles(rmGen.getTest());
         System.out.println("Done: " + classToGenerateFor);
     }

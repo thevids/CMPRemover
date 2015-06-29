@@ -459,13 +459,13 @@
          		<field-name>userID</field-name>
          	</cmp-field>
          	<cmp-field id="CMPAttribute_1079354527519">
-         		<field-name>GJGAAR</field-name>
+         		<field-name>gJGAAR</field-name>
          	</cmp-field>
          	<cmp-field id="CMPAttribute_1079354527534">
-         		<field-name>GJGNR</field-name>
+         		<field-name>gJGNR</field-name>
          	</cmp-field>
          	<cmp-field id="CMPAttribute_1079354527550">
-         		<field-name>OppdragNr</field-name>
+         		<field-name>oppdragNr</field-name>
          	</cmp-field>
          	<cmp-field id="CMPAttribute_1079354527551">
          		<field-name>brandWish</field-name>
