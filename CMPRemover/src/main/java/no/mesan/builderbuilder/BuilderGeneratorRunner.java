@@ -6,7 +6,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.Named;
+import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.xml.sax.SAXException;
 
 /**
@@ -14,15 +16,13 @@ import org.xml.sax.SAXException;
  * @author k001vfo
  *
  */
-public final class RoasterRunner {
+public final class BuilderGeneratorRunner {
     private static final String FILE_PATH_TO_OLD_CODE =
-            "C:/dev/work/workspaceGammel/MollerEVPEJB/src/main/java/no/moller/evp/model/ejb/";
-    private static final String FILE_PATH_TO_OLD_XMI =
-            "C:/dev/work/workspaceGammel/MollerEVPEJB/src/main/resources/META-INF/";
-    private static final String NEW_PACKAGE = "no.moller.evp.model.ejb";
-            // In future, use this: "no.moller.evp.model.dao";
+                    "./CMPRemover/src/test/resources/";
+    private static final String NEW_PACKAGE =
+            "no.mesan.builder";
 
-    private RoasterRunner() {}
+    private BuilderGeneratorRunner() {}
 
     /**
      * Main, can be modified to use arguments supplied from command-line,
@@ -45,10 +45,7 @@ public final class RoasterRunner {
 //            generate(classToGenerateFor);
 //        }
 
-//        String classToGenerateFor = "Appointment";
-//        String classToGenerateFor = "Resource";
-//        String classToGenerateFor = "EtrReportAdditional";
-        String classToGenerateFor = "Appointmentchanged";
+        String classToGenerateFor = "AppointmentDom";
         generate(classToGenerateFor);
     }
 
@@ -56,23 +53,27 @@ public final class RoasterRunner {
             throws IOException, SAXException {
         System.out.println("Start: " + classToGenerateFor);
 
-        final RowMapperAndDomainGenerator rmGen = new RowMapperAndDomainGenerator(FILE_PATH_TO_OLD_CODE,
+        final BuilderGenerator rmGen = new BuilderGenerator(FILE_PATH_TO_OLD_CODE,
                 NEW_PACKAGE,
-                FILE_PATH_TO_OLD_XMI,
                 classToGenerateFor);
 
-        writeToFiles(rmGen.getDomainObj());
-        writeToFiles(rmGen.getBuilders());
-        System.out.println("Done: " + classToGenerateFor);
+        int count = 0;
+        for(JavaClassSource blr: rmGen.getBuilders()) {
+            writeToFiles(blr, count++);
+            System.out.println("Done: " + classToGenerateFor);
+        }
     }
 
-    private static void writeToFiles(final Named source)
+    private static void writeToFiles(final Named source, int count)
             throws IOException {
+        String name = source.getName()
+                + ((count == 0) ? "" : "" + count)
+                + ".java";
+
         try (PrintWriter prw = new PrintWriter(
                 new BufferedWriter(
-                        new FileWriter(new File(source.getName() + ".java")))))
-        {
-            prw.print(source.toString());
+                        new FileWriter(new File(name))))) {
+            prw.print(Roaster.format(source.toString()));
         }
     }
 }

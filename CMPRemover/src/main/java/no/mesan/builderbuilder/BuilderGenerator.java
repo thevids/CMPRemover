@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 import org.jboss.forge.roaster.Roaster;
@@ -15,7 +17,7 @@ import org.jboss.forge.roaster.model.source.MethodSource;
 import org.jboss.forge.roaster.model.source.ParameterSource;
 import org.xml.sax.SAXException;
 
-public class RowMapperAndDomainGenerator {
+public class BuilderGenerator {
 
     // Init with filepaths etc
     final private String filePathToOldCode;
@@ -35,13 +37,13 @@ public class RowMapperAndDomainGenerator {
      * @throws IOException
      * @throws SAXException
      */
-    public RowMapperAndDomainGenerator(String filePathToOldCode,
-                        String newPackage,
-                        String filePathToOldXmi,
-                        String className) throws IOException, SAXException {
+    public BuilderGenerator(String filePathToOldCode,
+                            String newPackage,
+                            String className) throws IOException, SAXException {
         this.filePathToOldCode = filePathToOldCode;
         this.newPackage = newPackage;
 
+        builders = new ArrayList<>();
         generate(className);
     }
 
@@ -54,7 +56,7 @@ public class RowMapperAndDomainGenerator {
      * @throws SAXException
      */
     private void generate(String className) throws IOException {
-        final String classAsString = IOUtils.toString(new File(filePathToOldCode + className + "Bean.java").toURI(),
+        final String classAsString = IOUtils.toString(new File(filePathToOldCode + className + ".java").toURI(),
                 Charset.forName("ISO-8859-1"));
 
         // Read existing bean, and make domain-object out of it
@@ -66,35 +68,54 @@ public class RowMapperAndDomainGenerator {
     private void generateBuilder(final String className)
             throws IOException {
 
-
         bean.getMethods().stream().filter(m -> m.isConstructor())
-            .forEach(m -> makeBuilder(m, className));
+            .forEach(m -> builders.add(makeBuilder(m, className)));
     }
 
 
-    private void makeBuilder(MethodSource<JavaClassSource> constructor, String className) {
-        int count = 0;
+    private JavaClassSource makeBuilder(MethodSource<JavaClassSource> constructor, String className) {
+        JavaClassSource builder = Roaster.create(JavaClassSource.class);
+
+        addImports();
+
+        builder.setName(className + "Builder")
+                .setPackage(newPackage)
+                .getJavaDoc().setText("Builder for " + className);
+
         for (ParameterSource<JavaClassSource> parm: constructor.getParameters()) {
 
-            count++;
+            builder.addField()
+                    .setType(parm.getType().toString())
+                    .setName(parm.getName());
 
-            JavaClassSource builder = Roaster.create(JavaClassSource.class);
-
-            addImports();
-
-            builder.setName(className + "Builder" + count)
-            .setPackage(newPackage)
-            .getJavaDoc().setText("Builder for " + className);
-
-            builder.addProperty(parm.getType().toString(), parm.getName());
-
-            builder.addMethod(parm.getName())
+            builder.addMethod()
+                .setName(parm.getName())
                 .setParameters(parm.getType().toString() + " " + parm.getName())
                 .setReturnType(builder)
+                .setPublic()
                 .setBody("this." + parm.getName() +" = " + parm.getName() + "; return this;");
-
-            builders.add(builder);
         }
+
+        builder.addMethod()
+                .setName("build")
+                .setReturnType(bean)
+                .setPublic()
+                .setBody(bodyOfBuildMethod(constructor));
+        return builder;
+    }
+
+    private String bodyOfBuildMethod(MethodSource<JavaClassSource> constructor) {
+        StringBuilder body = new StringBuilder();
+        body.append("return new ")
+            .append(constructor.getName())
+            .append("(")
+            .append(
+                constructor.getParameters().stream()
+                    .map(p -> p.getName())
+                    .collect(Collectors.joining(", \n"))
+            )
+            .append(");");
+        return body.toString();
     }
 
     private void addImports() {
