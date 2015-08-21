@@ -6,6 +6,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import junit.framework.Assert;
+import no.mesan.builder.ReallyLargeDomainThing;
+import no.mesan.builder.ReallyLargeDomainThingBuilder;
+
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.Named;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
@@ -18,7 +22,7 @@ import org.xml.sax.SAXException;
  */
 public final class BuilderGeneratorRunner {
     private static final String FILE_PATH_TO_OLD_CODE =
-                    "./CMPRemover/src/test/resources/";
+                    "./src/test/resources/";
     private static final String NEW_PACKAGE =
             "no.mesan.builder";
 
@@ -45,7 +49,7 @@ public final class BuilderGeneratorRunner {
 //            generate(classToGenerateFor);
 //        }
 
-        String classToGenerateFor = "AppointmentDom";
+        String classToGenerateFor = "ReallyLargeDomainThing";
         generate(classToGenerateFor);
     }
 

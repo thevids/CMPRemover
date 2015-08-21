@@ -76,7 +76,7 @@ public class BuilderGenerator {
     private JavaClassSource makeBuilder(MethodSource<JavaClassSource> constructor, String className) {
         JavaClassSource builder = Roaster.create(JavaClassSource.class);
 
-        addImports();
+        bean.getImports().forEach(imp -> builder.addImport(imp));
 
         builder.setName(className + "Builder")
                 .setPackage(newPackage)
@@ -116,10 +116,6 @@ public class BuilderGenerator {
             )
             .append(");");
         return body.toString();
-    }
-
-    private void addImports() {
-//        builder.addImport(ResultSet.class);
     }
 
     public List<JavaClassSource> getBuilders() {
