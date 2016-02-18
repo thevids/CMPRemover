@@ -16,12 +16,20 @@ import org.xml.sax.SAXException;
  */
 public final class DataUpdateGeneratorRunner {
     private static final String FILE_PATH_TO_OLD_DATA_CODE =
-            "C:/dev/work/workspaceGammel/MollerEVPEJB/src/main/java/no/moller/evp/model/data/";
+            "C:/dev/work/workspaceGammel/ModellKatalogEJB/src/main/java/no/moller/mmod/ejb/internet/";
     private static final String FILE_PATH_TO_OLD_CODE =
-            "C:/dev/work/workspaceGammel/MollerEVPEJB/src/main/java/no/moller/evp/model/ejb/";
+            "C:/dev/work/workspaceGammel/ModellKatalogEJB/src/main/java/no/moller/mmod/ejb/internet/";
     private static final String FILE_PATH_TO_OLD_XMI =
-            "C:/dev/work/workspaceGammel/MollerEVPEJB/src/main/resources/META-INF/";
-    private static final String NEW_PACKAGE = "no.moller.evp.model.ejb";
+            "C:/dev/work/workspaceGammel/ModellKatalogEJB/src/main/resources/META-INF/";
+    private static final String NEW_PACKAGE = "no.moller.mmod.ejb.internet";
+
+    //    private static final String FILE_PATH_TO_OLD_DATA_CODE =
+//            "C:/dev/work/workspaceGammel/MollerEVPEJB/src/main/java/no/moller/evp/model/data/";
+//    private static final String FILE_PATH_TO_OLD_CODE =
+//            "C:/dev/work/workspaceGammel/MollerEVPEJB/src/main/java/no/moller/evp/model/ejb/";
+//    private static final String FILE_PATH_TO_OLD_XMI =
+//            "C:/dev/work/workspaceGammel/MollerEVPEJB/src/main/resources/META-INF/";
+//    private static final String NEW_PACKAGE = "no.moller.evp.model.ejb";
             // In future, use this: "no.moller.evp.model.dao";
 
     private DataUpdateGeneratorRunner() {}
@@ -37,8 +45,8 @@ public final class DataUpdateGeneratorRunner {
     public static void main(final String[] args) throws SAXException, IOException {
         File dir = new File(FILE_PATH_TO_OLD_CODE);
 
-        File[] listFiles = dir.listFiles(f -> f.getName().endsWith("Data.java") &&
-                                              f.getName().startsWith("Etr") );
+        File[] listFiles = dir.listFiles(f -> f.getName().endsWith("Data.java"));
+//                                    && f.getName().startsWith("Etr") );
         int x = 0;
 
         for (File file : listFiles) {

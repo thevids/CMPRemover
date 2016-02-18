@@ -33,7 +33,7 @@ public class XMLFieldFetcher {
 
     public static Collection<String> retrieveFields(String ejbJarDocAsString, String className) {
         return $(ejbJarDocAsString).find("entity")
-                                   .filter(ctx -> $(ctx).attr("id").equals(className))
+                                   .filter(ctx -> $(ctx).child("ejb-name").content().equals(className)) //attr("id").equals(className))
                                    .find("cmp-field")
                                    .find("field-name")
                                    .contents();
@@ -53,7 +53,7 @@ public class XMLFieldFetcher {
             final String className,
             final String methName) throws SAXException, IOException {
         return $(ejbJarDocAsString).find("entity")
-                                   .filter(ctx -> $(ctx).attr("id").equals(className))
+                                   .filter(ctx -> $(ctx).child("ejb-name").content().equals(className)) //.attr("id").equals(className))
                                    .find("query")
                                    .filter(ctx -> $(ctx).child("query-method").child("method-name").content().equalsIgnoreCase(methName) )
                                    .child("ejb-ql")
@@ -62,7 +62,7 @@ public class XMLFieldFetcher {
 
     public static boolean isCMP2(String ejbJarDocAsString, String className) {
         String ver = $(ejbJarDocAsString).find("entity")
-                .filter(ctx -> $(ctx).attr("id").equals(className))
+                .filter(ctx -> $(ctx).child("ejb-name").content().equals(className)) //.attr("id").equals(className))
                 .child("cmp-version")
                 .content();
 

@@ -45,7 +45,12 @@ public class DaoMethodBody {
         final StringBuilder str = new StringBuilder();
 
         if (hasWhere) {
-            str.append("String whereSQL = \" WHERE " + namedParamWhereStatement + "\";\n\n");
+            int indexOfWhere = namedParamWhereStatement.indexOf("where ");
+
+            String whereContent =
+                    (indexOfWhere > -1) ? namedParamWhereStatement.substring(indexOfWhere + 6) : namedParamWhereStatement;
+            str.append("String whereSQL = \" WHERE "
+                    + whereContent + "\";\n\n");
         }
         str.append("final MapSqlParameterSource parameters = new MapSqlParameterSource();\n");
 
