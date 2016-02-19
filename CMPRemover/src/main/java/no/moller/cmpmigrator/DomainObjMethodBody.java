@@ -16,12 +16,30 @@ public class DomainObjMethodBody {
      */
     static void makePrimaryKeyFieldGettersAndSetters(JavaClassSource key, JavaClassSource bean) {
 
+        makePimaryKeyObjectCreatorAndGetter(key, bean);
+
+        getFieldStream(key) .forEach(f -> {
+            addSetterAndGetter(bean, f);
+            }
+        );
+    }
+
+    static void makePimaryKeyObjectCreatorAndGetter(JavaClassSource key, JavaClassSource bean) {
         primaryKeyGetterMethod(key, bean).setBody("return new " + key.getName() + "("
-                + getKeyFieldStream(key).map(k -> k.getName())
+                + getFieldStream(key).map(k -> k.getName())
                            .collect(Collectors.joining(","))
                 +");").setReturnType(key.getName());
+    }
 
-        getKeyFieldStream(key) .forEach(f -> {
+    /**
+     * Make getter methods on domain obj for the fields that dont have it, typically
+     * in CMP2-beans.
+     * @param key
+     * @param bean
+     */
+    static void makeMissingGettersAndSetters(JavaClassSource bean) {
+        getFieldStream(bean)
+            .forEach(f -> {
             addSetterAndGetter(bean, f);
             }
         );
@@ -47,7 +65,7 @@ public class DomainObjMethodBody {
              + " { this." + f.getName() + " = " + f.getName() + "; }");
     }
 
-    private static Stream<FieldSource<JavaClassSource>> getKeyFieldStream(
+    private static Stream<FieldSource<JavaClassSource>> getFieldStream(
             JavaClassSource key) {
         return key.getFields().stream().filter(f -> !f.getName().equalsIgnoreCase("serialVersionUID"));
     }

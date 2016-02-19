@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 import org.apache.commons.io.IOUtils;
 import org.jboss.forge.roaster.Roaster;
+import org.jboss.forge.roaster.model.source.FieldSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.MethodSource;
 import org.xml.sax.SAXException;
@@ -78,17 +79,23 @@ public class RowMapperAndDomainGenerator {
         if(isCMP2) {
             bean.getMethods().stream()
                              .filter(method -> method.getName().startsWith("get"))
+                             .filter(method -> !method.getName().startsWith("getPrimaryKey"))
+                             .filter(method -> !method.getName().startsWith("getMyEntityCtx"))
+                             .filter(method -> !method.getName().startsWith("get" + className + "Data"))
                              .forEach(m -> bean.addField()
                                                .setType( m.getReturnType().getName() )
                                                .setName(extractFieldname(m))
-                                               .setPublic()
+                                               .setPrivate()
                                                );
             bean.setAbstract(false);
             bean.getMethods().stream()
                              .filter(m -> m.isAbstract())
                              .forEach(m -> bean.removeMethod(m));
+            DomainObjMethodBody.makeMissingGettersAndSetters(bean);
+            DomainObjMethodBody.makePimaryKeyObjectCreatorAndGetter(key, bean);
+        } else {
+            DomainObjMethodBody.makePrimaryKeyFieldGettersAndSetters(key, bean);
         }
-        DomainObjMethodBody.makePrimaryKeyFieldGettersAndSetters(key, bean);
     }
 
     private String extractFieldname(MethodSource<JavaClassSource> m) {
@@ -105,8 +112,14 @@ public class RowMapperAndDomainGenerator {
                      .getJavaDoc().setFullText("Domain object.");
 
         bean.getMethods().stream()
-                         .filter(m -> m.getName().startsWith("ejb") || m.getName().startsWith("_"))
+                         .filter(m -> m.getName().startsWith("ejb")
+                                 || m.getName().startsWith("_")
+                                 || m.getName().contains("EntityContext"))
                          .forEach(m -> bean.removeMethod(m));
+
+        bean.getFields().stream()
+                        .filter(f -> f.getName().equals("myEntityCtx"))
+                        .forEach(f -> bean.removeField(f));
 
         // Remove all things ejb from the method declarations
         bean.getMethods().forEach(
