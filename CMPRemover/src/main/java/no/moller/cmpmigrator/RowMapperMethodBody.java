@@ -99,11 +99,12 @@ public class RowMapperMethodBody {
             doTrim = true; // Strings need trimming
         }
         String retType = returnType.getName();
-        return "rs.get" +
+        return trimStart(doTrim) +
+                "rs.get" +
                 removePath(retType) + "(" +
-                (doTrim ? "trim(": "") + "\"" +
-                              field.toUpperCase() +"\")" + (doTrim ? ")"
-                           : "");
+                "\"" +
+                              field.toUpperCase() +"\")" +
+                trimEnd(doTrim);
     }
 
     /** Making a resultset retrieve-command for the correct type of field. */
@@ -115,12 +116,22 @@ public class RowMapperMethodBody {
             doTrim = true; // Strings need trimming
         }
         String retType = returnType.getName();
-        return "rs.get" +
+        return trimStart(doTrim) +
+                "rs.get" +
                 removePath(retType) + "(" +
-                (doTrim ? "trim(": "") + "\"" +
+                "\"" +
                 field.getName().toUpperCase() +"\")" +
-                (doTrim ? ")": "");
+                trimEnd(doTrim);
     }
+
+    private static String trimStart(boolean doTrim) {
+        return doTrim ? "trim(": "";
+    }
+
+    private static String trimEnd(boolean doTrim) {
+        return doTrim ? ")" : "";
+    }
+
 
     /** Remove all package-path before type-name. */
     private static String removePath(String retType) {
