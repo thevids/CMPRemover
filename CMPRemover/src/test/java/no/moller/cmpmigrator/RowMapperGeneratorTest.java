@@ -35,6 +35,10 @@ public class RowMapperGeneratorTest {
 			if(met.getName().startsWith("mapRow")) {
 			    assertTrue("Body shold contain set-calls on data", met.getBody().indexOf("data.set") > -1);
                 assertTrue("Body shold contain get-calls on rs", met.getBody().indexOf("rs.get") > -1);
+                assertTrue("Trim should be done on Strings before rs.getString",
+                        met.getBody().indexOf("(trim(rs.getString(") > -1);
+                assertFalse("Trim should be done on Strings before rs.getString, not after",
+                        met.getBody().indexOf("(rs.getString(trim(") > -1);
 			}
 		}
 
