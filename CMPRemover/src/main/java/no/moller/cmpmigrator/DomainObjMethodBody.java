@@ -61,7 +61,7 @@ public class DomainObjMethodBody {
 
         bean.addMethod("public void set"
              + FieldNameTool.enlargeFirsLetter(f.getName())
-             + "(" + f.getType().getQualifiedName() + " " + f.getName() + ")"
+             + "(" + f.getType().getName() + " " + f.getName() + ")"
              + " { this." + f.getName() + " = " + f.getName() + "; }");
     }
 

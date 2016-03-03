@@ -98,13 +98,24 @@ public class RowMapperMethodBody {
         if(returnType.isType(String.class)) {
             doTrim = true; // Strings need trimming
         }
-        String retType = returnType.getName();
+        String retType = returnTypesMightBeArray(returnType);
+
         return trimStart(doTrim) +
                 "rs.get" +
                 removePath(retType) + "(" +
                 "\"" +
                               field.toUpperCase() +"\")" +
                 trimEnd(doTrim);
+    }
+
+    private static String returnTypesMightBeArray(Type<JavaClassSource> returnType) {
+        if (returnType.getName().contains("[]")) {
+            if (returnType.getName().startsWith("byte")) {
+                return returnType.getQualifiedName() + "s";
+            }
+            return "array";
+        }
+        return returnType.getName();
     }
 
     /** Making a resultset retrieve-command for the correct type of field. */
