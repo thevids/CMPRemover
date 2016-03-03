@@ -98,22 +98,25 @@ public class RowMapperMethodBody {
         if(returnType.isType(String.class)) {
             doTrim = true; // Strings need trimming
         }
-        String retType = returnTypesMightBeArray(returnType);
+        String rsGetType = returnTypesMightBeArrayOrInt(returnType);
 
         return trimStart(doTrim) +
                 "rs.get" +
-                removePath(retType) + "(" +
+                removePath(rsGetType) + "(" +
                 "\"" +
                               field.toUpperCase() +"\")" +
                 trimEnd(doTrim);
     }
 
-    private static String returnTypesMightBeArray(Type<JavaClassSource> returnType) {
+    private static String returnTypesMightBeArrayOrInt(Type<JavaClassSource> returnType) {
         if (returnType.getName().contains("[]")) {
             if (returnType.getName().startsWith("byte")) {
                 return returnType.getQualifiedName() + "s";
             }
             return "array";
+        }
+        if (returnType.isType("java.lang.Integer")) {
+            return "int"; // Resultset has method for "getInt", but not "getInteger"
         }
         return returnType.getName();
     }
@@ -126,7 +129,9 @@ public class RowMapperMethodBody {
         if(returnType.isType(String.class)) {
             doTrim = true; // Strings need trimming
         }
-        String retType = returnType.getName();
+
+        String retType = returnTypesMightBeArrayOrInt(returnType);
+
         return trimStart(doTrim) +
                 "rs.get" +
                 removePath(retType) + "(" +
