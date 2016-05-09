@@ -55,6 +55,7 @@ public class StatementModifier {
         System.out.println(whereStatement);
         return whereStatement.substring(whereStatement.toLowerCase().indexOf("where"))
                                                       .replaceAll("\\?\\d", "\\?")
-                                                      .replaceAll("o\\.", "T1\\.");
+                                                      .replaceAll("o\\.", "T1\\.")
+                                                      .replaceAll("\n", " ");
     }
 }
