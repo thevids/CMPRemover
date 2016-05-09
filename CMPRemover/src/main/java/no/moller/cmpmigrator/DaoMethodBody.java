@@ -45,7 +45,7 @@ public class DaoMethodBody {
         final StringBuilder str = new StringBuilder();
 
         if (hasWhere) {
-            int indexOfWhere = namedParamWhereStatement.indexOf("where ");
+            int indexOfWhere = namedParamWhereStatement.toLowerCase().indexOf("where ");
 
             String whereContent =
                     (indexOfWhere > -1) ? namedParamWhereStatement.substring(indexOfWhere + 6) : namedParamWhereStatement;
@@ -94,7 +94,7 @@ public class DaoMethodBody {
         }
 
         // Some do not have a where-statement, return empty
-        if(whereStatement.indexOf("where") < 0) {
+        if(whereStatement.toLowerCase().indexOf("where") < 0) {
             return "";
         }
 

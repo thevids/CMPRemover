@@ -53,7 +53,7 @@ public class StatementModifier {
 
     public static String normalizeEJBQL(String whereStatement) {
         System.out.println(whereStatement);
-        return whereStatement.substring(whereStatement.indexOf("where"))
+        return whereStatement.substring(whereStatement.toLowerCase().indexOf("where"))
                                                       .replaceAll("\\?\\d", "\\?")
                                                       .replaceAll("o\\.", "T1\\.");
     }
