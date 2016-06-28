@@ -36,7 +36,7 @@ public final class DaoUpdateGeneratorRunner {
         File dir = new File(FILE_PATH_TO_OLD_CODE);
 
         File[] listFiles = dir.listFiles(f -> f.getName().endsWith("DaoImpl.java")
-                                              && f.getName().startsWith("Etr") );
+                                               /*&& f.getName().startsWith("Etr")*/ );
         int x = 0;
 
         for (File file : listFiles) {
