@@ -55,7 +55,9 @@ public final class SpringSetupGeneratorRunner {
 
         makeSimpleInsert(classToGenerateFor, springxml);
 
-        springxml.append("    <bean class=\"no.moller.evp.model.ejb.")
+        springxml.append("    <bean class=\"")
+                 .append(NEW_PACKAGE)
+                 .append(".")
                  .append(classToGenerateFor)
                  .append("DaoImpl\">\n")
                  .append("        <property name=\"simpleInsert\" ref=\"simpleJdbcInsert")
@@ -85,7 +87,7 @@ public final class SpringSetupGeneratorRunner {
         System.out.println(source);
         try (PrintWriter prw = new PrintWriter(
                 new BufferedWriter(
-                        new FileWriter(new File(name + ".xml")))))
+                        new FileWriter(new File(name)))))
         {
             prw.print(source);
         }
